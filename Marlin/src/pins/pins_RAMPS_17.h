@@ -110,7 +110,7 @@
   #define Y_CS_PIN         42  //14:49
 #endif
 
-#define Z_STEP_PIN         69  //14:46
+#define Z_STEP_PIN         68  //14:46
 #define Z_DIR_PIN          69  //14:48
 #define Z_ENABLE_PIN       67  //14:62
 #ifndef Z_CS_PIN
@@ -349,12 +349,12 @@
 
   #elif ENABLED(NEWPANEL) && ENABLED(PANEL_ONE)
 
-    #define LCD_PINS_RS         45 //aux-5 //14:40
-    #define LCD_PINS_ENABLE     43 //aux-5 //14:42
-    #define LCD_PINS_D4         37 //aux-5 //14:65
-    #define LCD_PINS_D5         35 //aux-5 //14:66
-    #define LCD_PINS_D6         39 //aux-5 //14:44
-    #define LCD_PINS_D7         41 //aux-5 //14:64
+    #define LCD_PINS_RS         45 //aux-6 //14:40
+    #define LCD_PINS_ENABLE     43 //aux-6 //14:42
+    #define LCD_PINS_D4         37 //aux-6 //14:65
+    #define LCD_PINS_D5         35 //aux-6 //14:66
+    #define LCD_PINS_D6         39 //aux-6 //14:44
+    #define LCD_PINS_D7         41 //aux-6 //14:64
 
   #else
 
@@ -370,12 +370,12 @@
 
     #elif ENABLED(ZONESTAR_LCD)
 
-      #define LCD_PINS_RS       41 //aux-5 //14:64
-      #define LCD_PINS_ENABLE   39 //aux-5 //14:44
-      #define LCD_PINS_D4       47 //aux-5 //14:63
-      #define LCD_PINS_D5       45 //aux-5 //14:40
-      #define LCD_PINS_D6       43 //aux-5 //14:42
-      #define LCD_PINS_D7       37 //aux-5 //14:65
+      #define LCD_PINS_RS       41 //aux-6 //14:64
+      #define LCD_PINS_ENABLE   39 //aux-6 //14:44
+      #define LCD_PINS_D4       47 //aux-6 //14:63
+      #define LCD_PINS_D5       45 //aux-6 //14:40
+      #define LCD_PINS_D6       43 //aux-6 //14:42
+      #define LCD_PINS_D7       37 //aux-6 //14:65
 
     #else
 
@@ -441,10 +441,10 @@
 
     #elif ENABLED(REPRAPWORLD_GRAPHICAL_LCD)
 
-      #define BTN_EN1           41 //aux-5 //14:64
-      #define BTN_EN2           32 //aux-5 //14:59
-      #define BTN_ENC           47 //aux-5 //14:63
-      #define SD_DETECT_PIN     43 //aux-5 //14:42
+      #define BTN_EN1           41 //aux-6 //14:64
+      #define BTN_EN2           32 //aux-6 //14:59
+      #define BTN_ENC           47 //aux-6 //14:63
+      #define SD_DETECT_PIN     43 //aux-6 //14:42
 	  
     #elif ENABLED(LCD_I2C_PANELOLU2)
 
@@ -521,12 +521,12 @@
 
     #elif ENABLED(MINIPANEL)
 
-      #define BEEPER_PIN        43 //aux-5 //14:42
+      #define BEEPER_PIN        43 //aux-6 //14:42
       // not connected to a pin
-      #define LCD_BACKLIGHT_PIN 37 //aux-5 //14:65   // backlight LED on A11/D65
+      #define LCD_BACKLIGHT_PIN 37 //aux-6 //14:65   // backlight LED on A11/D65
 
-      #define DOGLCD_A0         39 //aux-5 //14:44
-      #define DOGLCD_CS         35 //aux-5 //14:66
+      #define DOGLCD_A0         39 //aux-6 //14:44
+      #define DOGLCD_CS         35 //aux-6 //14:66
 
       // GLCD features
       //#define LCD_CONTRAST   190
@@ -535,12 +535,12 @@
       //#define LCD_SCREEN_ROT_180
       //#define LCD_SCREEN_ROT_270
 
-      #define BTN_EN1           45 //aux-5 //14:40
-      #define BTN_EN2           47 //aux-5 //14:63
-      #define BTN_ENC           32 //aux-5 //14:59
+      #define BTN_EN1           45 //aux-6 //14:40
+      #define BTN_EN2           47 //aux-6 //14:63
+      #define BTN_ENC           32 //aux-6 //14:59
 
       #define SD_DETECT_PIN     49
-      #define KILL_PIN          41 //aux-5 //14:64
+      #define KILL_PIN          41 //aux-6 //14:64
 
     #elif ENABLED(ZONESTAR_LCD)
 
@@ -557,12 +557,12 @@
 
       // Buttons are directly attached using AUX-2
       #if ENABLED(REPRAPWORLD_KEYPAD)
-        #define SHIFT_OUT       45 //aux-5 //14:40
-        #define SHIFT_CLK       39 //aux-5 //14:44
-        #define SHIFT_LD        43 //aux-5 //14:42
-        #define BTN_EN1         41 //aux-5 //14:64
-        #define BTN_EN2         32 //aux-5 //14:59
-        #define BTN_ENC         47 //aux-5 //14:63
+        #define SHIFT_OUT       45 //aux-6 //14:40
+        #define SHIFT_CLK       39 //aux-6 //14:44
+        #define SHIFT_LD        43 //aux-6 //14:42
+        #define BTN_EN1         41 //aux-6 //14:64
+        #define BTN_EN2         32 //aux-6 //14:59
+        #define BTN_ENC         47 //aux-6 //14:63
       #elif ENABLED(PANEL_ONE)
         #define BTN_EN1         59   // AUX2 PIN 3
         #define BTN_EN2         63   // AUX2 PIN 4

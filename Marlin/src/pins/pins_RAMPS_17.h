@@ -100,7 +100,7 @@
 #define X_DIR_PIN          57  //14:55
 #define X_ENABLE_PIN       55  //14:38
 #ifndef X_CS_PIN
-  #define X_CS_PIN         45  //14:53
+  #define X_CS_PIN         46  //14:53
 #endif
 
 #define Y_STEP_PIN         62  //14:60

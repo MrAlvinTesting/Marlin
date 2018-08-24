@@ -1,3 +1,30 @@
+/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
+/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
+/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
+/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
+
+/*  Changes from default (neutral) settings/£define in configuration.h file: 
+ *     - set BAUDRATE 115200
+ *     - set POWER_SUPPLY 1
+ *     - set drivers X, Y, Z, E0 as A4988 
+ *     - // Set-no: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ *
+ 
+ *  Hardware details on the RAMPS 1.7 board: 
+ *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
+ *     - 12V power applied to all three power inputs; equals: Bed-PWR, Stepper-PWR, 12V-PWR)
+ *     - no power to Vin => J1 is in Off position. And....
+ *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
+ *
+ *  Status: 
+ *     - Stepper X can be manually moved, using manual controls in Repetier PC Host (v. 2.0.5)
+ * 
+ *  ToDo:
+ *     - connect a power resistor to a NTC, so actual temperature changes/readings will happen.
+ *     
+ */
+
+
 /**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
@@ -125,7 +152,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 250000
+#define BAUDRATE 115200
 
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH
@@ -241,7 +268,7 @@
  *
  * :{ 0:'No power switch', 1:'ATX', 2:'X-Box 360' }
  */
-#define POWER_SUPPLY 0
+#define POWER_SUPPLY 1
 
 #if POWER_SUPPLY > 0
   // Enable this option to leave the PSU off at startup.
@@ -566,13 +593,13 @@
  *          TMC5130, TMC5130_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE']
  */
-//#define X_DRIVER_TYPE  A4988
-//#define Y_DRIVER_TYPE  A4988
-//#define Z_DRIVER_TYPE  A4988
+#define X_DRIVER_TYPE  A4988
+#define Y_DRIVER_TYPE  A4988
+#define Z_DRIVER_TYPE  A4988
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
 //#define Z2_DRIVER_TYPE A4988
-//#define E0_DRIVER_TYPE A4988
+#define E0_DRIVER_TYPE A4988
 //#define E1_DRIVER_TYPE A4988
 //#define E2_DRIVER_TYPE A4988
 //#define E3_DRIVER_TYPE A4988
@@ -690,7 +717,7 @@
  *
  * Enable this option for a probe connected to the Z Min endstop pin.
  */
-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 
 /**
  * Z_MIN_PROBE_ENDSTOP

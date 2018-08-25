@@ -37,7 +37,7 @@
   #include "../module/servo.h"
 #endif
 
-#if ENABLED(EXT_SOLENOID) && !ENABLED(PARKING_EXTRUDER)
+#if ENABLED(EXT_SOLENOID) && DISABLED(PARKING_EXTRUDER)
   #include "../feature/solenoid.h"
 #endif
 
@@ -122,25 +122,22 @@
                   grabpos = parkingposx[tmp_extruder] + hotend_offset[X_AXIS][active_extruder]
                             + (tmp_extruder == 0 ? -(PARKING_EXTRUDER_GRAB_DISTANCE) : PARKING_EXTRUDER_GRAB_DISTANCE);
       /**
-       *  Steps:
-       *    1. Raise Z-Axis to give enough clearance
-       *    2. Move to park position of old extruder
-       *    3. Disengage magnetic field, wait for delay
-       *    4. Move near new extruder
-       *    5. Engage magnetic field for new extruder
-       *    6. Move to parking incl. offset of new extruder
-       *    7. Lower Z-Axis
+       * 1. Raise Z-Axis to give enough clearance
+       * 2. Move to park position of old extruder
+       * 3. Disengage magnetic field, wait for delay
+       * 4. Move near new extruder
+       * 5. Engage magnetic field for new extruder
+       * 6. Move to parking incl. offset of new extruder
+       * 7. Lower Z-Axis
        */
 
       // STEP 1
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("Starting Autopark");
-        if (DEBUGGING(LEVELING)) DEBUG_POS("current position:", current_position);
+        if (DEBUGGING(LEVELING)) DEBUG_POS("Start Autopark", current_position);
       #endif
       current_position[Z_AXIS] += PARKING_EXTRUDER_SECURITY_RAISE;
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("(1) Raise Z-Axis ");
-        if (DEBUGGING(LEVELING)) DEBUG_POS("Moving to Raised Z-Position", current_position);
+        if (DEBUGGING(LEVELING)) DEBUG_POS("(1) Raise Z-Axis", current_position);
       #endif
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[Z_AXIS], active_extruder);
       planner.synchronize();
@@ -148,33 +145,35 @@
       // STEP 2
       current_position[X_AXIS] = parkingposx[active_extruder] + hotend_offset[X_AXIS][active_extruder];
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPAIR("(2) Park extruder ", active_extruder);
-        if (DEBUGGING(LEVELING)) DEBUG_POS("Moving ParkPos", current_position);
+        if (DEBUGGING(LEVELING)) {
+          SERIAL_ECHOLNPAIR("(2) Park extruder ", int(active_extruder));
+          DEBUG_POS("Moving ParkPos", current_position);
+        }
       #endif
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[X_AXIS], active_extruder);
       planner.synchronize();
 
       // STEP 3
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("(3) Disengage magnet ");
+        if (DEBUGGING(LEVELING)) SERIAL_ECHOLNPGM("(3) Disengage magnet ");
       #endif
       pe_deactivate_magnet(active_extruder);
 
       // STEP 4
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("(4) Move to position near new extruder");
+        if (DEBUGGING(LEVELING)) SERIAL_ECHOLNPGM("(4) Move to position near new extruder");
       #endif
       current_position[X_AXIS] += (active_extruder == 0 ? 10 : -10); // move 10mm away from parked extruder
 
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        if (DEBUGGING(LEVELING)) DEBUG_POS("Moving away from parked extruder", current_position);
+        if (DEBUGGING(LEVELING)) DEBUG_POS("Move away from parked extruder", current_position);
       #endif
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[X_AXIS], active_extruder);
       planner.synchronize();
 
       // STEP 5
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("(5) Engage magnetic field");
+        if (DEBUGGING(LEVELING)) SERIAL_ECHOLNPGM("(5) Engage magnetic field");
       #endif
 
       #if ENABLED(PARKING_EXTRUDER_SOLENOIDS_INVERT)
@@ -187,8 +186,7 @@
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[X_AXIS], active_extruder);
       current_position[X_AXIS] = grabpos;
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPAIR("(6) Unpark extruder ", tmp_extruder);
-        if (DEBUGGING(LEVELING)) DEBUG_POS("Move UnparkPos", current_position);
+        if (DEBUGGING(LEVELING)) DEBUG_POS("(6) Unpark extruder", current_position);
       #endif
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[X_AXIS]/2, active_extruder);
       planner.synchronize();
@@ -196,8 +194,7 @@
       // Step 7
       current_position[X_AXIS] = midpos - hotend_offset[X_AXIS][tmp_extruder];
       #if ENABLED(DEBUG_LEVELING_FEATURE)
-        SERIAL_ECHOLNPGM("(7) Move midway between hotends");
-        if (DEBUGGING(LEVELING)) DEBUG_POS("Move midway to new extruder", current_position);
+        if (DEBUGGING(LEVELING)) DEBUG_POS("(7) Move midway between hotends", current_position);
       #endif
       planner.buffer_line_kinematic(current_position, planner.max_feedrate_mm_s[X_AXIS], active_extruder);
       planner.synchronize();
@@ -355,11 +352,11 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
   planner.synchronize();
 
   #if HAS_LEVELING
-      // Set current position to the physical position
-      const bool leveling_was_active = planner.leveling_active;
-      set_bed_leveling_enabled(false);
-   #endif
-  
+    // Set current position to the physical position
+    const bool leveling_was_active = planner.leveling_active;
+    set_bed_leveling_enabled(false);
+  #endif
+
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
 
     mixing_tool_change(tmp_extruder);
@@ -415,12 +412,14 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
           #endif
 
           const float xdiff = hotend_offset[X_AXIS][tmp_extruder] - hotend_offset[X_AXIS][active_extruder],
-                      ydiff = hotend_offset[Y_AXIS][tmp_extruder] - hotend_offset[Y_AXIS][active_extruder];
+                      ydiff = hotend_offset[Y_AXIS][tmp_extruder] - hotend_offset[Y_AXIS][active_extruder],
+                      zdiff = hotend_offset[Z_AXIS][tmp_extruder] - hotend_offset[Z_AXIS][active_extruder];
 
           #if ENABLED(DEBUG_LEVELING_FEATURE)
             if (DEBUGGING(LEVELING)) {
               SERIAL_ECHOPAIR("Offset Tool XY by { ", xdiff);
               SERIAL_ECHOPAIR(", ", ydiff);
+              SERIAL_ECHOPAIR(", ", zdiff);
               SERIAL_ECHOLNPGM(" }");
             }
           #endif
@@ -428,6 +427,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
           // The newly-selected extruder XY is actually at...
           current_position[X_AXIS] += xdiff;
           current_position[Y_AXIS] += ydiff;
+          current_position[Z_AXIS] += zdiff;
 
           // Set the new active extruder
           active_extruder = tmp_extruder;
@@ -475,7 +475,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
       planner.synchronize();
 
-      #if ENABLED(EXT_SOLENOID) && !ENABLED(PARKING_EXTRUDER)
+      #if ENABLED(EXT_SOLENOID) && DISABLED(PARKING_EXTRUDER)
         disable_all_solenoids();
         enable_solenoid_on_active_extruder();
       #endif
@@ -511,13 +511,12 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     #if HAS_FANMUX
       fanmux_switch(active_extruder);
     #endif
-  
+
     #if HAS_LEVELING
-          planner.synchronize();
-          // Restore leveling to re-establish the logical position
-          set_bed_leveling_enabled(leveling_was_active);
+      // Restore leveling to re-establish the logical position
+      set_bed_leveling_enabled(leveling_was_active);
     #endif
-  
+
     SERIAL_ECHO_START();
     SERIAL_ECHOLNPAIR(MSG_ACTIVE_EXTRUDER, (int)active_extruder);
 

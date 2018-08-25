@@ -7,7 +7,14 @@
  *     - set BAUDRATE 115200
  *     - set POWER_SUPPLY 1
  *     - set drivers X, Y, Z, E0 as A4988 
- *     - // Set-no: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ *     - // un-Set: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ *     - set Temp sensor BED 
+ * 
+ *  Changes to test later:
+ *     - SDsupport
+ *     - set EEPROM_SETTINGS
+ *     - set DISPLAY_CHARSET_HD44780 to WESTERN
+ *     - set LCD to: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
  
  *  Hardware details on the RAMPS 1.7 board: 
@@ -345,7 +352,7 @@
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 1
 #define TEMP_SENSOR_CHAMBER 0
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
@@ -393,7 +400,7 @@
 // PID Tuning Guide here: http://reprap.org/wiki/PID_Tuning
 
 // Comment the following line to disable PID and enable bang-bang.
-#define PIDTEMP
+//#define PIDTEMP
 #define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // Limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1 0.95      // Smoothing factor within any PID loop

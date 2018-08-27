@@ -3,7 +3,7 @@
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
 
-/*  Changes from default (neutral) settings/£define in configuration.h file: 
+/*  Changes from default (neutral) settings/define in configuration.h file: 
  *     - set BAUDRATE 115200
  *     - set POWER_SUPPLY 1
  *     - set drivers X, Y, Z, E0 as A4988 
@@ -24,13 +24,13 @@
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
  *
  *  Status: 
- *     - Stepper X can be manually moved, using manual controls in Repetier PC Host (v. 2.0.5)
+ *     - Stepper X can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
  *     - Hot-end and T3 pins reports temperatures, but Bed pin gives some trouble, 
  *       so I switched Bed and T3 pins in pins_RAMPS_17.h - for now
  *       Thus Bed and hot-end is now fully functional
  * 
  *  ToDo:
- *     - test LCD universal bi-directional 3V<->5V adapter for aux3 and aux-4
+ *     - test LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4
  *     
  */
 

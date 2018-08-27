@@ -200,8 +200,8 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN          6  //14:13   // Analog Input
-#define TEMP_1_PIN          7  //14:15   // Analog Input
-#define TEMP_BED_PIN        5  //14:14   // Analog Input
+#define TEMP_1_PIN          5  //14:15   // Analog Input
+#define TEMP_BED_PIN        7  //14:14   // Analog Input
 
 // SPI for Max6675 or Max31855 Thermocouple
 #if DISABLED(SDSUPPORT)

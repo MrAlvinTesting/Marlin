@@ -25,9 +25,12 @@
  *
  *  Status: 
  *     - Stepper X can be manually moved, using manual controls in Repetier PC Host (v. 2.0.5)
+ *     - Hot-end and T3 pins reports temperatures, but Bed pin gives some trouble, 
+ *       so I switched Bed and T3 pins in pins_RAMPS_17.h - for now
+ *       Thus Bed and hot-end is now fully functional
  * 
  *  ToDo:
- *     - connect a power resistor to a NTC, so actual temperature changes/readings will happen.
+ *     - test LCD universal bi-directional 3V<->5V adapter for aux3 and aux-4
  *     
  */
 
@@ -312,7 +315,8 @@
  *     2 : 200k thermistor - ATC Semitec 204GT-2 (4.7k pullup)
  *     3 : Mendel-parts thermistor (4.7k pullup)
  *     4 : 10k thermistor !! do not use it for a hotend. It gives bad resolution at high temp. !!
- *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan & J-Head) (4.7k pullup)
+ *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan & J-Head) (4.7k pullup) 
+  *   25 : 100K thermistor - ATC Semitec 104GT-1 (4.7k pullup)  Created using an AD595 and thermocouple at Labitat.dk
  *   501 : 100K Zonestar (Tronxy X3A) Thermistor
  *     6 : 100k EPCOS - Not as accurate as table 1 (created using a fluke thermocouple) (4.7k pullup)
  *     7 : 100k Honeywell thermistor 135-104LAG-J01 (4.7k pullup)
@@ -335,6 +339,7 @@
  *    51 : 100k thermistor - EPCOS (1k pullup)
  *    52 : 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
  *    55 : 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (1k pullup)
+
  *
  *  1047 : Pt1000 with 4k7 pullup
  *  1010 : Pt1000 with 1k pullup (non standard)
@@ -352,7 +357,7 @@
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
-#define TEMP_SENSOR_BED 1
+#define TEMP_SENSOR_BED 25
 #define TEMP_SENSOR_CHAMBER 0
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999

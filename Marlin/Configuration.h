@@ -24,10 +24,8 @@
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
  *
  *  Status: 
- *     - Stepper X can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
- *     - Hot-end and T3 pins reports temperatures, but Bed pin gives some trouble, 
- *       so I switched Bed and T3 pins in pins_RAMPS_17.h - for now
- *       Thus Bed and hot-end is now fully functional
+ *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
+ *     - Bed, Hot-end and T3 pins reports temperatures.
  * 
  *  ToDo:
  *     - test LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4

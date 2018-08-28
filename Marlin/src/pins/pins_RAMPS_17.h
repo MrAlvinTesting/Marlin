@@ -105,7 +105,7 @@
 
 #define Y_STEP_PIN         62  //14:60
 #define Y_DIR_PIN          63  //14:61
-#define Y_ENABLE_PIN       59  //14:56
+#define Y_ENABLE_PIN       58  //14:56
 #ifndef Y_CS_PIN
   #define Y_CS_PIN         42  //14:49
 #endif
@@ -200,8 +200,8 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN          6  //14:13   // Analog Input
-#define TEMP_1_PIN          5  //14:15   // Analog Input
-#define TEMP_BED_PIN        7  //14:14   // Analog Input
+#define TEMP_1_PIN          7  //14:15   // Analog Input
+#define TEMP_BED_PIN        5  //14:14   // Analog Input
 
 // SPI for Max6675 or Max31855 Thermocouple
 #if DISABLED(SDSUPPORT)

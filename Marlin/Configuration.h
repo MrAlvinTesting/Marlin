@@ -9,6 +9,7 @@
  *     - set drivers X, Y, Z, E0 as A4988 
  *     - // un-Set: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
+ *     - has set inverting endstops to true 
  * 
  *  Changes to test later:
  *     - SDsupport
@@ -26,6 +27,8 @@
  *  Status: 
  *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
  *     - Bed, Hot-end and T3 pins reports temperatures.
+ *     - One needs to use NC (normal close) endstops, 
+ *       or set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
  * 
  *  ToDo:
  *     - test LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4
@@ -581,13 +584,13 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
-#define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Y_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define X_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Y_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
-#define Z_MIN_PROBE_ENDSTOP_INVERTING false // set to true to invert the logic of the probe.
+#define X_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Y_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define X_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Y_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Z_MIN_PROBE_ENDSTOP_INVERTING true // set to true to invert the logic of the probe.
 
 /**
  * Stepper Drivers

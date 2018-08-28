@@ -234,10 +234,10 @@
   #define MOSFET_D_PIN     -1
 #endif
 #ifndef RAMPS_D8_PIN
-  #define RAMPS_D8_PIN      10  //14:8
+  #define RAMPS_D8_PIN      9  //14:8
 #endif
 #ifndef RAMPS_D9_PIN
-  #define RAMPS_D9_PIN      9
+  #define RAMPS_D9_PIN     10
 #endif
 #ifndef RAMPS_D10_PIN
   #define RAMPS_D10_PIN    11  //14:10
@@ -273,6 +273,12 @@
   #else                                               // Non-specific are "EFB" (i.e., "EFBF" or "EFBE")
     #define FAN_PIN        RAMPS_D9_PIN
   #endif
+#endif
+
+#ifndef FAN1_PIN
+	#ifdef IS_RAMPS_17
+		#define FAN1_PIN    8
+	#endif
 #endif
 
 //

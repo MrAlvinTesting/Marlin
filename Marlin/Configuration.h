@@ -10,6 +10,7 @@
  *     - // un-Set: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
  *     - has set inverting endstops to true 
+ *     - REPRAP_DISCOUNT_SMART_CONTROLLER
  * 
  *  Changes to test later:
  *     - SDsupport
@@ -23,15 +24,20 @@
  *     - 12V power applied to all three power inputs; equals: Bed-PWR, Stepper-PWR, 12V-PWR)
  *     - no power to Vin => J1 is in Off position. And....
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
+ *     - Fan1 pin is now added to pins_RAMPS_17.h, and is connected to D8
  *
  *  Status: 
  *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
  *     - Bed, Hot-end and T3 pins reports temperatures.
  *     - One needs to use NC (normal close) endstops, 
  *       or set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
+ *     - LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4 is working
+ *     - M106 P1 and M107 P1, now works
+ *
  * 
  *  ToDo:
- *     - test LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4
+ *     - test LCD: REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     
  */
 
@@ -1585,7 +1591,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader

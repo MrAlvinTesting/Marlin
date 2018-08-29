@@ -11,14 +11,15 @@
  *     - set Temp sensor BED 
  *     - has set inverting endstops to true 
  *     - set EEPROM_SETTINGS
- *     - REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER
  *
  * 
  *  Changes to test later:
  *     - SDsupport
- *     - set LCD to: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
- 
+ *
+ *
  *  Hardware details on the RAMPS 1.7 board: 
  *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
  *     - 12V power applied to all three power inputs; equals: Bed-PWR, Stepper-PWR, 12V-PWR)
@@ -35,7 +36,7 @@
  *     - M106 P1 and M107 P1, now works
  *     - EEPROM settings and commands are working
  *       Remember to do M502 or M503, before the first M500 
- *     - on Mega, using LCD01 adapter, the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
+ *     - on both Mega and DUE, using LCD01 adapter, the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
  *       but the beeper sounds during boot (and programming). 
  *       Must scope it some day, to see if a pull-up resistor can be placed somewhere.
  *
@@ -181,8 +182,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_17_EFB
-  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine

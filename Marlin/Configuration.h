@@ -10,12 +10,12 @@
  *     - // un-Set: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
  *     - has set inverting endstops to true 
- *     - REPRAP_DISCOUNT_SMART_CONTROLLER
  *     - set EEPROM_SETTINGS
+ *     - REPRAP_DISCOUNT_SMART_CONTROLLER
+ *
  * 
  *  Changes to test later:
  *     - SDsupport
- *     - set DISPLAY_CHARSET_HD44780 to WESTERN
  *     - set LCD to: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
  
@@ -35,10 +35,12 @@
  *     - M106 P1 and M107 P1, now works
  *     - EEPROM settings and commands are working
  *       Remember to do M502 or M503, before the first M500 
+ *     - on Mega, using LCD01 adapter, the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
+ *       but the beeper sounds during boot (and programming). 
+ *       Must scope it some day, to see if a pull-up resistor can be placed somewhere.
  *
  * 
  *  ToDo:
- *     - test LCD: REPRAP_DISCOUNT_SMART_CONTROLLER
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     
  */
@@ -179,8 +181,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
-  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  #define MOTHERBOARD BOARD_RAMPS_17_EFB
+  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine

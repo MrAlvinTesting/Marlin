@@ -11,10 +11,10 @@
  *     - set Temp sensor BED 
  *     - has set inverting endstops to true 
  *     - REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - set EEPROM_SETTINGS
  * 
  *  Changes to test later:
  *     - SDsupport
- *     - set EEPROM_SETTINGS
  *     - set DISPLAY_CHARSET_HD44780 to WESTERN
  *     - set LCD to: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
@@ -33,6 +33,8 @@
  *       or set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
  *     - LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4 is working
  *     - M106 P1 and M107 P1, now works
+ *     - EEPROM settings and commands are working
+ *       Remember to do M502 or M503, before the first M500 
  *
  * 
  *  ToDo:
@@ -1286,7 +1288,7 @@
 // M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 //
-//#define EEPROM_SETTINGS // Enable for M500 and M501 commands
+#define EEPROM_SETTINGS // Enable for M500 and M501 commands
 //#define DISABLE_M503    // Saves ~2700 bytes of PROGMEM. Disable for release!
 #define EEPROM_CHITCHAT   // Give feedback on EEPROM commands. Disable to save PROGMEM.
 

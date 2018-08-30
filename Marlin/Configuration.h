@@ -7,41 +7,60 @@
  *     - set BAUDRATE 115200
  *     - set POWER_SUPPLY 1
  *     - set drivers X, Y, Z, E0 as A4988 
- *     - // un-Set: #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ *     - //commented #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
- *     - has set inverting endstops to true 
+ *     - set inverting endstops to true 
  *     - set EEPROM_SETTINGS
  *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using LCD01 3V<->5V bi-directional level converter
+ *     - set SDSUPPORT (see status notes though)
+ *     - set FIX_MOUNTED_PROBE
+ *     - set Z_MIN_PROBE_ENDSTOP
  *
  * 
  *  Changes to test later:
- *     - SDsupport
- *
+ *     - 
  *
  *
  *  Hardware details on the RAMPS 1.7 board: 
  *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
- *     - 12V power applied to all three power inputs; equals: Bed-PWR, Stepper-PWR, 12V-PWR)
+ *     - 12V power applied to all three power inputs (equals: Bed-PWR, Stepper-PWR, 12V-PWR)
  *     - no power to Vin => J1 is in Off position. And....
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
  *     - Fan1 pin is now added to pins_RAMPS_17.h, and is connected to D8
+ *     - on DUE; using 3V<->5V LCD01 adapter, with REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with default connection (directly) to aux-3 and aux-4 
+ *     - testing sd-card: REPRAP_DISCOUNT_SMART_CONTROLLER has built in SD-card slot.
+ *
  *
  *  Status: 
  *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
  *     - Bed, Hot-end and T3 pins reports temperatures.
- *     - One needs to use NC (normal close) endstops, 
- *       or set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
- *     - LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4 is working
+ *     - One needs to use NC (normal close) endstops, or 
+ *       set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
+ *     - LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4 is working, with the test program, is working
  *     - M106 P1 and M107 P1, now works
- *     - EEPROM settings and commands are working
- *       Remember to do M502 or M503, before the first M500 
+ *     - EEPROM settings and commands are working, but must save to eeprom, before it will contain useful data,
+ *       like, do: M503 to see defaults, then M500 to store in eeprom for the first time 
  *     - on both Mega and DUE, using LCD01 adapter, the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
  *       but the beeper sounds during boot (and programming). 
- *       Must scope it some day, to see if a pull-up resistor can be placed somewhere.
+ *       Must scope it some day, to see if a (large value) pull-down resistor can be placed somewhere.
+ *     - SD-support does not seem to function properly. Could be the SD-card I am using,it might not have a mmc interface.
+ *       Setting SPI_SPEED to eigth made no difference, but would not if my sd-card does not have a mmc-interface. 
+ *     - All endstops report correctly on M119
+ *     - To get Z-probe to be included in M119 (or to function at all), 
+ *       you need to define a probe type, like: FIX_MOUNTED_PROBE. 
+ *       With a probe type defined, Z_MIN_PROBE_ENDSTOP set, and Z_MIN_PROBE_PIN defined in pins_RAMPS_17.h 
+ *       the Z-probe socket is ready for use. 
+ *       Please note that setting PROBE_MANUALLY type (or not defining a probe type), will remove any Z-probe 
+ *       stuff from even being compiled into the firmware. 
+ *       Also note; that the S pin on the Z-probe socket needs a positive signal, as this is what usually 
+ *       is the sognal from non-touch (magnitic) probes. 
+ *       
  *
  * 
  *  ToDo:
+ *     - find a way to determine if mmc port exists on sd-card 
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     
  */
@@ -182,8 +201,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
-  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  #define MOTHERBOARD BOARD_RAMPS_17_EFB
+  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -564,9 +583,9 @@
 #define USE_XMIN_PLUG
 #define USE_YMIN_PLUG
 #define USE_ZMIN_PLUG
-//#define USE_XMAX_PLUG
-//#define USE_YMAX_PLUG
-//#define USE_ZMAX_PLUG
+#define USE_XMAX_PLUG
+#define USE_YMAX_PLUG
+#define USE_ZMAX_PLUG
 
 // Enable pullup for all endstops to prevent a floating state
 #define ENDSTOPPULLUPS
@@ -762,7 +781,8 @@
  * disastrous consequences. Use with caution and do your homework.
  *
  */
-//#define Z_MIN_PROBE_ENDSTOP
+#define Z_MIN_PROBE_ENDSTOP
+
 
 /**
  * Probe Type
@@ -783,7 +803,7 @@
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
  *   (e.g., an inductive probe or a nozzle-based probe-switch.)
  */
-//#define FIX_MOUNTED_PROBE
+#define FIX_MOUNTED_PROBE
 
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
@@ -1493,7 +1513,7 @@
  * you must uncomment the following option or it won't work.
  *
  */
-//#define SDSUPPORT
+#define SDSUPPORT
 
 /**
  * SD CARD: SPI SPEED

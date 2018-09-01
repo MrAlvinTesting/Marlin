@@ -60,6 +60,12 @@
  *       stuff from even being compiled into the firmware. 
  *       Also note; that the S pin on the Z-probe socket needs a positive signal, as this is what usually 
  *       is the sognal from non-touch (magnitic) probes. 
+ *     - When compiling using Arduino 1.8.6 and 1.9-beta then a line like this: 
+ *           #define Z_ENABLE_PIN       67  //14:62
+ *                                          ^
+ *       gives compile a error. This error doesnot happen in Arduino 1.8.5
+ *       Either way, I have removed all comments from lines in pins_RAMPS_17.h file, that produced this kind of error
+ *
  *       
  *
  * 
@@ -207,8 +213,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_17_EFB
-  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine

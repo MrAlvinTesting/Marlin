@@ -21,6 +21,10 @@
  *  Changes to test later:
  *     - 
  *
+ *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
+ *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests  
+ *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
+ *
  *
  *  Hardware details on the RAMPS 1.7 board: 
  *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
@@ -60,7 +64,9 @@
  *
  * 
  *  ToDo:
- *     - find a way to determine if mmc port exists on sd-card 
+ *     - find a way to avoid the pin 37 (beep pin) being activated while booting 
+ *       and programming the Due, so the Beeper does not keep making that loud sound 
+ *     - find a way to determine if mmc port exists on a (my) sd-card 
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     
  */

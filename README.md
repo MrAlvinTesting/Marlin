@@ -5,7 +5,9 @@
 
 <img align="top" width=175 src="buildroot/share/pixmaps/logo/marlin-250.png" />
 
-****** Very preliminary RAMPS 1.7 testing ******
+*********** This fork of Marlin Firmware is targeted at the new RAMPS 1.7 shield ***********
+**** More details about the RAMPS 1.7 shield here: https://github.com/MrAlvin/RAMPS_1.7 ****
+***********--------------------------------------------------------------------- ***********
 
 Additional documentation can be found at the [Marlin Home Page](http://marlinfw.org/).
 Please test this firmware and let us know if it misbehaves in any way. Volunteers are standing by!

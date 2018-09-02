@@ -1,4 +1,13 @@
 /**
+ ********** Testing RAMPS 1.7 **********
+ ********** Testing RAMPS 1.7 **********
+ ********** Testing RAMPS 1.7 **********
+ * 
+ * This file can no longer be used with RAMPS 1.3 or 1.4 
+ * for easier access to testing RAMPS 1.7 all pin number have been changed to suit RAMPS 1.7 
+ *
+ *
+ *------------------------------------------------------------------------------------------------------------
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -21,7 +30,7 @@
  */
 
 /**
- * Arduino Mega with RAMPS v1.4 (or v1.3) pin assignments
+ * Arduino Mega with RAMPS v1.7 pin assignments
  *
  * Applies to the following boards:
  *

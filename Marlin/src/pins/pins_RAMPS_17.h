@@ -136,13 +136,13 @@
  */
 #if ENABLED(TMC_USE_SW_SPI)
   #ifndef TMC_SW_MOSI
-    #define TMC_SW_MOSI    27
+    #define TMC_SW_MOSI    51
   #endif
   #ifndef TMC_SW_MISO
-    #define TMC_SW_MISO    29
+    #define TMC_SW_MISO    50
   #endif
   #ifndef TMC_SW_SCK
-    #define TMC_SW_SCK     31
+    #define TMC_SW_SCK     52
   #endif
 #endif
 
@@ -293,7 +293,7 @@
 
 // define digital pin 4 for the filament runout sensor. Use the RAMPS 1.4 digital input 4 on the servos connector
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN    -1
+  #define FIL_RUNOUT_PIN   40
 #endif
 
 #ifndef PS_ON_PIN
@@ -341,6 +341,9 @@
 //////////////////////////
 // LCDs and Controllers //
 //////////////////////////
+
+// - all AUX-2 pins needs to be changed for use with RAMPS 1.7
+//   use pins from AUX-4 to replace pins located on ramps 1.4 AUX-2
 
 #if ENABLED(ULTRA_LCD)
 
@@ -460,7 +463,7 @@
       #define LCD_SDSS          SDSS
       #define KILL_PIN          41
 
-    #elif ENABLED(LCD_I2C_VIKI)  // 1.7 fix this section
+    #elif ENABLED(LCD_I2C_VIKI)  // for 1.7 fix this section
 
       #define BTN_EN1           22   // http://files.panucatt.com/datasheets/viki_wiring_diagram.pdf explains 40/42.
       #define BTN_EN2            7   // 22/7 are unused on RAMPS_14. 22 is unused and 7 the SERVO0_PIN on RAMPS_13.
@@ -587,4 +590,28 @@
     #endif
   #endif // NEWPANEL
 
-#endif // ULTRA_LCD
+  
+  
+/*
+So, a REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER  and REPRAP_DISCOUNT_SMART_CONTROLLER
+uses the following pins
+
+  #define LCD_PINS_RS       16
+  #define LCD_PINS_ENABLE   17
+  #define LCD_PINS_D4       23
+  #define LCD_PINS_D5       25
+  #define LCD_PINS_D6       27
+
+  #define LCD_PINS_D7       29
+  #define BEEPER_PIN        37
+  #define BTN_EN1           31
+  #define BTN_EN2           33
+
+  #define BTN_ENC           35
+  #define KILL_PIN          41
+  
+  #define SD_DETECT_PIN     49
+
+
+And these pins, on aux-4, are probably available for other use: pins 39, 43, 45, 47, 32  with a REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+*/

@@ -12,7 +12,12 @@
  *     - set inverting endstops to true 
  *     - set EEPROM_SETTINGS
  *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using LCD01 3V<->5V bi-directional level converter
+ *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using LCD01 3V<->5V bi-directional level converter. LCD works.
+ *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using hacked aux-3+aux-4 adapter. And using hacked LCD controller, to stop beep.
+ *       Hacked "no-beep at boot" controller, is using a spare buffer from 4050. 
+ *       Remove R1 on adapter. Add 4K7 resistor between  pcb wire (from D37) and GND. Lift pin 3 on 4050 chip. Wire R1 pad to pin 3 on 4050 chip.
+ *       Wire pin 2 on 4050 chip to other pad of R1 (the pad closest to Q1) 
+ *       4050 buffer output 
  *     - set SDSUPPORT (see status notes though)
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
@@ -32,8 +37,13 @@
  *     - no power to Vin => J1 is in Off position. And....
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
  *     - Fan1 pin is now added to pins_RAMPS_17.h, and is connected to D8
- *     - on DUE; using 3V<->5V LCD01 adapter, with REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with default connection (directly) to aux-3 and aux-4 
+ *     - on DUE; using 3V<->5V LCD01 adapter, with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard does not work. 
+ *     - on DUE; using hacked "direct LCD adapter", with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard works in test sketch, but not in Marlin.
+ *       Hacked direct LCD adapter, takes power from 5V pin, not Vcc pin. 
+ *       On buttom side of pcb: Cut pcb wire from Aux-3 pin Vcc, cut before pcb via point. 
+ *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS-1.7_Aux-3 5V pin. 
+ *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
+ *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with default connection (directly) to aux-3 and aux-4, everything works.
  *     - testing sd-card: REPRAP_DISCOUNT_SMART_CONTROLLER has built in SD-card slot.
  *
  *
@@ -225,8 +235,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_17_EFB
-  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine

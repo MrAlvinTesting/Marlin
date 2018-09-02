@@ -46,11 +46,10 @@
  *     - M106 P1 and M107 P1, now works
  *     - EEPROM settings and commands are working, but must save to eeprom, before it will contain useful data,
  *       like, do: M503 to see defaults, then M500 to store in eeprom for the first time 
- *     - on both Mega and DUE, using LCD01 adapter, the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
+ *     - on both Mega and DUE, using LCD01 adapter, the LCD, buttons etc. on the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
  *       but the beeper sounds during boot (and programming). 
- *       Must scope it some day, to see if a (large value) pull-down resistor can be placed somewhere.
- *     - SD-support does not seem to function properly. Could be the SD-card I am using,it might not have a mmc interface.
- *       Setting SPI_SPEED to eigth made no difference, but would not if my sd-card does not have a mmc-interface. 
+ *       Must scope it some day, to see if a (large value) pull-down resistor can be placed somewhere (tested and not effective)
+ *     - SD-support does not seem to function properly (This issue has been partially resolved, see below).
  *     - All endstops report correctly on M119
  *     - To get Z-probe to be included in M119 (or to function at all), 
  *       you need to define a probe type, like: FIX_MOUNTED_PROBE. 
@@ -63,17 +62,32 @@
  *     - When compiling using Arduino 1.8.6 and 1.9-beta then a line like this: 
  *           #define Z_ENABLE_PIN       67  //14:62
  *                                          ^
- *       gives compile a error. This error doesnot happen in Arduino 1.8.5
+ *       gives compile a error. This error does not happen in Arduino 1.8.5
  *       Either way, I have removed all comments from lines in pins_RAMPS_17.h file, that produced this kind of error
  *
+ *     - A SD test sketch has been made. See https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20ports-3-4-LCD/SD_listfiles
+ *       This test sketch works for both Mega and Due. 
+ *       But does not work for Due with LCD01 level converter :-( Bummer 
+ *        - a new LCD level converter needs to designed!
+ *     - Despite my success with reading the SD-card using the test sketch, 
+ *       then Marlin-2.0's access to the SD card does however not work (as of 2018 sept 2), so I wonder if 
+ *       my issue is related to this issue report: https://github.com/MarlinFirmware/Marlin/issues/11609
+ *     - by shorting out the 5V->3V linear regulator on the REPRAP_DISCOUNT_SMART_CONTROLLER, 
+ *       the LCD board works on Due. 
+ *       That is, the SD-card works with my test sketch 
+ *       and Marlin can write to the LCD, once the contrast potentiometer is turned all the way up. 
+ *       At 3.3V supply to this LCD, the text is however only barely readable. So 
+ *       the backlight resistor might need replacing with a lower ohm value. 
  *       
- *
  * 
  *  ToDo:
+ *     - get Marlin 2.0 to read the SD-card
  *     - find a way to avoid the pin 37 (beep pin) being activated while booting 
- *       and programming the Due, so the Beeper does not keep making that loud sound 
- *     - find a way to determine if mmc port exists on a (my) sd-card 
+ *       and programming the Due, so the Beeper does not keep making that loud sound. 
+ *       As the LCD01 universal 3V<->5V level converter's first tests does not work with the SD-card,
+ *       a new LCD interface card design can also be used to solve this Beeper issue. 
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+ *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
  *     
  */
 

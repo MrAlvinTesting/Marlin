@@ -90,7 +90,7 @@
 
 #define Y_STEP_PIN         62
 #define Y_DIR_PIN          63
-#define Y_ENABLE_PIN       59
+#define Y_ENABLE_PIN       58
 #ifndef Y_CS_PIN
   #define Y_CS_PIN         42
 #endif
@@ -219,10 +219,10 @@
   #define MOSFET_D_PIN     -1
 #endif
 #ifndef RAMPS_D8_PIN
-  #define RAMPS_D8_PIN     10
+  #define RAMPS_D8_PIN      9
 #endif
 #ifndef RAMPS_D9_PIN
-  #define RAMPS_D9_PIN      9
+  #define RAMPS_D9_PIN     10
 #endif
 #ifndef RAMPS_D10_PIN
   #define RAMPS_D10_PIN    11
@@ -260,6 +260,12 @@
   #endif
 #endif
 
+#ifndef FAN1_PIN
+	#ifdef IS_RAMPS_17
+		#define FAN1_PIN    8
+	#endif
+#endif
+
 //
 // Misc. Functions
 //
@@ -294,14 +300,14 @@
 //
 #if ENABLED(SPINDLE_LASER_ENABLE) && !PIN_EXISTS(SPINDLE_LASER_ENABLE)
   #if !defined(NUM_SERVOS) || NUM_SERVOS == 0 // try to use servo connector first
-    #define SPINDLE_LASER_ENABLE_PIN  4   // Pin should have a pullup/pulldown!
-    #define SPINDLE_LASER_PWM_PIN     6   // MUST BE HARDWARE PWM
+    #define SPINDLE_LASER_ENABLE_PIN  SERVO0_PIN   // Pin should have a pullup/pulldown!
+    #define SPINDLE_LASER_PWM_PIN     SERVO1_PIN   // MUST BE HARDWARE PWM
     #define SPINDLE_DIR_PIN           5
   #elif !(ENABLED(ULTRA_LCD) && ENABLED(NEWPANEL) \
       && (ENABLED(PANEL_ONE) || ENABLED(VIKI2) || ENABLED(miniVIKI) || ENABLED(MINIPANEL) || ENABLED(REPRAPWORLD_KEYPAD)))  // try to use AUX 2
     #define SPINDLE_LASER_ENABLE_PIN 40   // Pin should have a pullup/pulldown!
-    #define SPINDLE_LASER_PWM_PIN    44   // MUST BE HARDWARE PWM
-    #define SPINDLE_DIR_PIN          65
+    #define SPINDLE_LASER_PWM_PIN    X_MAX_PIN   // MUST BE HARDWARE PWM
+    #define SPINDLE_DIR_PIN          Y_MAX_PIN
   #endif
 #endif
 
@@ -309,13 +315,13 @@
 // Průša i3 MK2 Multiplexer Support - needs looking at for 1.7
 //
 #ifndef E_MUX0_PIN
-  #define E_MUX0_PIN 40   // Z_CS_PIN
+  #define E_MUX0_PIN X_MAX_PIN   // in 1.4 Z_CS_PIN
 #endif
 #ifndef E_MUX1_PIN
-  #define E_MUX1_PIN 42   // E0_CS_PIN
+  #define E_MUX1_PIN Y_MAX_PIN   // in 1.4 E0_CS_PIN
 #endif
 #ifndef E_MUX2_PIN
-  #define E_MUX2_PIN 44   // E1_CS_PIN
+  #define E_MUX2_PIN Z_MAX_PIN   // in 1.4 E1_CS_PIN
 #endif
 
 //////////////////////////
@@ -443,7 +449,7 @@
       #define LCD_SDSS          SDSS
       #define KILL_PIN          41
 
-    #elif ENABLED(LCD_I2C_VIKI)
+    #elif ENABLED(LCD_I2C_VIKI)  // for 1.7 fix this section
 
       #define BTN_EN1           22   // 1.7 error http://files.panucatt.com/datasheets/viki_wiring_diagram.pdf explains 40/42.
       #define BTN_EN2            7   // 1.7 error - 22/7 are unused on RAMPS_14. 22 is unused and 7 the SERVO0_PIN on RAMPS_13.

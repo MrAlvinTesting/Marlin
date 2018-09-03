@@ -55,3 +55,11 @@
 #define I2C_EEPROM
 #define E2END 0x1FFF
 
+/**
+ * If you need to, it is possible to use Software SPI
+ * It is also possible to slow down both Software and Hardware SPI. Set SPI_SPEED in configuration.h
+ */
+ //#define DUE_SOFTWARE_SPI
+ 
+ //Please note: When using (Hardware) SPI, do not use D52 for any other purpose, as it is needed for the Hardware SPI to function
+

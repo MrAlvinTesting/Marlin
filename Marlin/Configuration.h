@@ -12,15 +12,13 @@
  *     - set inverting endstops to true 
  *     - set EEPROM_SETTINGS
  *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - testing for Due, tested all SPI_SPEED settings - SDcard won't initialise correctly
  *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using LCD01 3V<->5V bi-directional level converter. LCD works.
  *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using hacked direct LCD (aux3+4) adapter. And using hacked LCD controller, to stop beep.
- *       LCD works, but Sdcard will not initialize using Marlin. Test program SD_listfiles.ino works fine. 
  *       Hacked "no-beep at boot" controller, is using a spare buffer from 4050. 
  *       Remove R1 on adapter. Add 4K7 resistor between  pcb wire (from D37) and GND. Lift pin 3 on 4050 chip. Wire R1 pad to pin 3 on 4050 chip.
  *       Wire pin 2 on 4050 chip to other pad of R1 (the pad closest to Q1) 
  *       4050 buffer output 
- *     - set SDSUPPORT (see status notes though)
+ *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
  *
@@ -40,13 +38,13 @@
  *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
  *     - Fan1 pin is now added to pins_RAMPS_17.h, and is connected to D8
  *     - on DUE; using 3V<->5V LCD01 adapter, with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard does not work. 
- *     - on DUE; using hacked "direct LCD adapter", with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard works in test sketch, but not in Marlin.
+ *     - on DUE; using hacked "direct LCD adapter", with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard works.
  *       Hacked direct LCD adapter, takes power from 5V pin, not Vcc pin. 
  *       On buttom side of pcb: Cut pcb wire from Aux-3 pin Vcc, cut before pcb via point. 
  *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS-1.7_Aux-3 5V pin. 
  *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
- *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with default connection (directly) to aux-3 and aux-4, everything works.
- *     - testing sd-card: REPRAP_DISCOUNT_SMART_CONTROLLER has built in SD-card slot.
+ *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4, everything works.
+ *     - testing sd-card: REPRAP_DISCOUNT_SMART_CONTROLLER has built in SD-card slot (it works).
  *
  *
  *  Status: 
@@ -74,7 +72,7 @@
  *     - When compiling using Arduino 1.8.6 and 1.9-beta then a line like this: 
  *       ;    #define Z_ENABLE_PIN       67  //14:62
  *       ;                                   ^
- *       gives compile a error. This error does not happen in Arduino 1.8.5
+ *       gives a compile error. This error does not happen in Arduino 1.8.5
  *       Either way, I have removed all comments from lines in pins_RAMPS_17.h file, that produced this kind of error
  *
  *     - A SD test sketch has been made. See https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20ports-3-4-LCD/SD_listfiles
@@ -83,24 +81,22 @@
  
  *     - by shorting out the 5V->3V linear regulator on the REPRAP_DISCOUNT_SMART_CONTROLLER, 
  *       the LCD board works on Due, when connecting via standard direct LCD adapter board for Aux3+4
- *       That is, the SD-card works with my test sketch and Marlin 
- *       can write to the LCD, once the contrast potentiometer is turned all the way up. 
+ *       That is the LCD becomes somewhat readable once the contrast potentiometer is turned all the way up. 
  *       At 3.3V supply to this LCD, the text is however only barely readable. So 
  *       the backlight resistor might need replacing with a lower ohm value. Or the contrast potentiometer needs changing. 
  *     - by hacking the LCD controller, the beep during boot and programming goes away.
  *     - by hacking the power pin on the direct LCD adapter it is possible to have full contrast LCD, 
  *       and still have only 3V signals going back into Due pins. 
  *       In this configuration it is important to NOT short the 5V->3V liniar regulator on the LCD controller board. 
- *     - have tested compiling using Arduino 1.8.5 and platform.io to get Marlin to read SDcard, but no luck so far. 
- *       The test sketch: SD_listfiles.ino does however work fine. 
+ *     - SD-card is working 
  *       
  * 
  *  ToDo:
- *     - get Marlin 2.0 to read the SD-card (Done on Mega:-) 
- *     - re-test Due with LCD01 level converter (Done, but no go) 
+ *     - get Marlin 2.0 to read the SD-card (Done on Mega and DUE :-) 
+ *     - re-test Due with LCD01 level converter 
  *     - find a way to avoid the pin 37 (beep pin) being activated while booting 
  *       and programming the Due, so the Beeper does not keep making that loud sound. (Done, by hacking the LCD controller board) 
- *       It is possible to also design a new aux-3+4 LCD adapter board, so this hack is not needed. 
+ *       It is possible to also design a new aux3+4 LCD adapter board, so this hack is not needed. 
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
  *     

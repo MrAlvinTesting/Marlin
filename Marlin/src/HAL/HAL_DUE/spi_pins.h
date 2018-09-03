@@ -45,12 +45,22 @@
   #define SCK_PIN           76
   #define MISO_PIN          74
   #define MOSI_PIN          75
-#else
-  // defaults
-  #define DUE_SOFTWARE_SPI
-  #define SCK_PIN           52
-  #define MISO_PIN          50
-  #define MOSI_PIN          51
+#else 
+  #ifdef IS_RAMPS_17_DUE
+    #ifndef DUE_SOFTWARE_SPI
+      #define SPI_PIN         86
+      #define SPI_CHAN         2
+    #endif
+    #define SCK_PIN           76
+    #define MISO_PIN          74
+    #define MOSI_PIN          75
+  #else
+    // defaults
+    #define DUE_SOFTWARE_SPI
+    #define SCK_PIN           52
+    #define MISO_PIN          50
+    #define MOSI_PIN          51
+  #endif
 #endif
 
 /* A.28, A.29, B.21, C.26, C.29 */

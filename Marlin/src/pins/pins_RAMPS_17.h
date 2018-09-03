@@ -41,6 +41,8 @@
  *  Differences between
  *  RAMPS_14| RAMPS_17
  *     many | many          - detailed list to be added later
+ *
+ *  Please note: When using (Hardware) SPI, do not use D52 for any other purpose, as it is needed for the Hardware SPI to function
  *    
  */
 
@@ -286,6 +288,8 @@
 //
 #define SDSS               53
 #define LED_PIN            13
+
+//Please note: When using (Hardware) SPI, do not use D52 for any other purpose, as it is needed for the Hardware SPI to function
 
 #ifndef FILWIDTH_PIN
   #define FILWIDTH_PIN      -1  // Analog Input on AUX2

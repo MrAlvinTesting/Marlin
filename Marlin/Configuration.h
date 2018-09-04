@@ -1,4 +1,14 @@
 /**
+ ********** Testing RAMPS 1.7 **********
+ ********** Testing RAMPS 1.7 **********
+ ********** Testing RAMPS 1.7 **********
+ * 
+ * Changes: 
+ *  - pins_RAMPS.h now has 1.7 pin #define's
+ *  - still uses 1.4 names though, like BOARD_RAMPS_14_EFB
+ */
+ 
+/**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *

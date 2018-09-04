@@ -6,8 +6,9 @@
  * This file can no longer be used with RAMPS 1.3 or 1.4 
  * for easier access to testing RAMPS 1.7 all pin number have been changed to suit RAMPS 1.7 
  *
- *
- *------------------------------------------------------------------------------------------------------------
+ */
+ 
+/*------------------------------------------------------------------------------------------------------------
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -34,7 +35,7 @@
  *
  * Applies to the following boards:
  *
- *  RAMPS_17_EFB (Hotend, Fan, Bed) (Fan1, Fan2)
+ *  RAMPS_17_EFB (Hotend, Fan, Bed) (Fan1)
  *  RAMPS_17_EEB (Hotend0, Hotend1, Bed) (Fan0, Fan1)
  *
  *  Other pins_MYBOARD.h files may override these defaults

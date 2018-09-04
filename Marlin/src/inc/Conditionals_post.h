@@ -282,8 +282,9 @@
 #ifndef POWER_SUPPLY
   #define POWER_SUPPLY 1
 #endif
-  #ifdef IS_RAMPS_17
-	// RAMPS_17 does not connect the PS_ON wire directly to an Arduino pin, so the logic is inverted.
+  #if ENABLED(IS_RAMPS_17)
+	// RAMPS_17 uses a mosfet to pull the PS_ON low, this adds protection to the Arduino pin
+	// but it reverses the HIGH/LOW logic
 	#if (POWER_SUPPLY == 1)     // 1 = ATX
 	  #define PS_ON_AWAKE  HIGH
 	  #define PS_ON_ASLEEP LOW
@@ -291,7 +292,7 @@
 	  #define PS_ON_AWAKE  HIGH
 	  #define PS_ON_ASLEEP LOW
 	#endif
-  #else
+  #else // default
 	#if (POWER_SUPPLY == 1)     // 1 = ATX
 	  #define PS_ON_AWAKE  LOW
 	  #define PS_ON_ASLEEP HIGH

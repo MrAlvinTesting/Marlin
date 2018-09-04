@@ -46,8 +46,8 @@
   #define MISO_PIN          74
   #define MOSI_PIN          75
 #else 
-  #ifdef IS_RAMPS_17_DUE
-    #ifndef DUE_SOFTWARE_SPI
+  #if ENABLED(IS_RAMPS_17_DUE)
+    #if DISABLED(DUE_SOFTWARE_SPI)
       #define SPI_PIN         86
       #define SPI_CHAN         2
     #endif

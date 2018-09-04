@@ -37,15 +37,15 @@
 
 #include "../inc/MarlinConfig.h"
 
-#if MB(RAMPS_13_EFB) || MB(RAMPS_14_EFB) || MB(RAMPS_PLUS_EFB) || MB(RAMPS_14_RE_ARM_EFB) || MB(RAMPS_SMART_EFB) || MB(RAMPS_DUO_EFB) || MB(RAMPS4DUE_EFB)
+#if MB(RAMPS_13_EFB) || MB(RAMPS_14_EFB) || MB(RAMPS_PLUS_EFB) || MB(RAMPS_14_RE_ARM_EFB) || MB(RAMPS_SMART_EFB) || MB(RAMPS_DUO_EFB) || MB(RAMPS4DUE_EFB) || MB(RAMPS17_DUE_EFB) || MB(RAMPS_17_EFB)
   #define IS_RAMPS_EFB
-#elif MB(RAMPS_13_EEB) || MB(RAMPS_14_EEB) || MB(RAMPS_PLUS_EEB) || MB(RAMPS_14_RE_ARM_EEB) || MB(RAMPS_SMART_EEB) || MB(RAMPS_DUO_EEB) || MB(RAMPS4DUE_EEB)
+#elif MB(RAMPS_13_EEB) || MB(RAMPS_14_EEB) || MB(RAMPS_PLUS_EEB) || MB(RAMPS_14_RE_ARM_EEB) || MB(RAMPS_SMART_EEB) || MB(RAMPS_DUO_EEB) || MB(RAMPS4DUE_EEB) || MB(RAMPS17_DUE_EEB) || MB(RAMPS_17_EEB)
   #define IS_RAMPS_EEB
-#elif MB(RAMPS_13_EFF) || MB(RAMPS_14_EFF) || MB(RAMPS_PLUS_EFF) || MB(RAMPS_14_RE_ARM_EFF) || MB(RAMPS_SMART_EFF) || MB(RAMPS_DUO_EFF) || MB(RAMPS4DUE_EFF)
+#elif MB(RAMPS_13_EFF) || MB(RAMPS_14_EFF) || MB(RAMPS_PLUS_EFF) || MB(RAMPS_14_RE_ARM_EFF) || MB(RAMPS_SMART_EFF) || MB(RAMPS_DUO_EFF) || MB(RAMPS4DUE_EFF) || MB(RAMPS17_DUE_EFF) || MB(RAMPS_17_EFF)
   #define IS_RAMPS_EFF
-#elif MB(RAMPS_13_EEF) || MB(RAMPS_14_EEF) || MB(RAMPS_PLUS_EEF) || MB(RAMPS_14_RE_ARM_EEF) || MB(RAMPS_SMART_EEF) || MB(RAMPS_DUO_EEF) || MB(RAMPS4DUE_EEF)
+#elif MB(RAMPS_13_EEF) || MB(RAMPS_14_EEF) || MB(RAMPS_PLUS_EEF) || MB(RAMPS_14_RE_ARM_EEF) || MB(RAMPS_SMART_EEF) || MB(RAMPS_DUO_EEF) || MB(RAMPS4DUE_EEF) || MB(RAMPS17_DUE_EEF) || MB(RAMPS_17_EEF)
   #define IS_RAMPS_EEF
-#elif MB(RAMPS_13_SF)  || MB(RAMPS_14_SF)  || MB(RAMPS_PLUS_SF)  || MB(RAMPS_14_RE_ARM_SF)  || MB(RAMPS_SMART_SF)  || MB(RAMPS_DUO_SF)  || MB(RAMPS4DUE_SF)
+#elif MB(RAMPS_13_SF)  || MB(RAMPS_14_SF)  || MB(RAMPS_PLUS_SF)  || MB(RAMPS_14_RE_ARM_SF)  || MB(RAMPS_SMART_SF)  || MB(RAMPS_DUO_SF)  || MB(RAMPS4DUE_SF) || MB(RAMPS17_DUE_SF) || MB(RAMPS_17_SF)
   #define IS_RAMPS_SF
 #endif
 
@@ -85,6 +85,16 @@
   #include "pins_RAMPS_PLUS.h"        // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
 #elif MB(RAMPS_PLUS_SF)
   #include "pins_RAMPS_PLUS.h"        // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
+#elif MB(RAMPS_17_EFB)
+  #include "pins_RAMPS17_Mega.h"      // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
+#elif MB(RAMPS_17_EEB)
+  #include "pins_RAMPS17_Mega.h"      // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
+#elif MB(RAMPS_17_EFF)
+  #include "pins_RAMPS17_Mega.h"      // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
+#elif MB(RAMPS_17_EEF)
+  #include "pins_RAMPS17_Mega.h"      // ATmega1280, ATmega2560                     env:megaatmega1280 env:megaatmega2560
+#elif MB(RAMPS_17_SF)
+  #include "pins_RAMPS17_Mega.h"      // ATmega1280, ATmega2560						env:megaatmega1280 env:megaatmega2560
 
 //
 // RAMPS Derivatives - ATmega1280, ATmega2560
@@ -359,6 +369,17 @@
   #include "pins_ARCHIM2.h"           // SAM3X8E                                    env:DUE env:DUE_debug
 #elif MB(ALLIGATOR)
   #include "pins_ALLIGATOR_R2.h"      // SAM3X8E                                    env:DUE env:DUE_debug
+#elif MB(RAMPS17_DUE_EFB)
+  #include "pins_RAMPS17_DUE.h"       // SAM3X8E                                    env:DUE env:DUE_USB env:DUE_debug
+#elif MB(RAMPS17_DUE_EEB)
+  #include "pins_RAMPS17_DUE.h"       // SAM3X8E                                    env:DUE env:DUE_USB env:DUE_debug
+#elif MB(RAMPS17_DUE_EFF)
+  #include "pins_RAMPS17_DUE.h"       // SAM3X8E                                    env:DUE env:DUE_USB env:DUE_debug
+#elif MB(RAMPS17_DUE_EEF)
+  #include "pins_RAMPS17_DUE.h"       // SAM3X8E                                    env:DUE env:DUE_USB env:DUE_debug
+#elif MB(RAMPS17_DUE_SF)
+  #include "pins_RAMPS17_DUE.h"       // SAM3X8E                                    env:DUE env:DUE_USB env:DUE_debug
+
 
 //
 // STM32 ARM Cortex-M3

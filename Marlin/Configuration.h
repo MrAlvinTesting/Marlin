@@ -93,10 +93,10 @@
  * 
  *  ToDo:
  *     - get Marlin 2.0 to read the SD-card (Done on Mega and DUE :-) 
- *     - re-test Due with LCD01 level converter 
+ *     - re-test Due with LCD01 level converter (Done, it works now for SD-card, but the beeper issue is there, despite the LCD controller board hack)
  *     - find a way to avoid the pin 37 (beep pin) being activated while booting 
- *       and programming the Due, so the Beeper does not keep making that loud sound. (Done, by hacking the LCD controller board) 
- *       It is possible to also design a new aux3+4 LCD adapter board, so this hack is not needed. 
+ *       and programming the Due, so the Beeper does not keep making that loud sound. (Done, by hacking the LCD controller board, works with the standard LCD aux3+4 adapter) 
+ *       It must be possible to also design a new aux3+4 LCD adapter board, in a way, so this hack is not needed. 
  *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
  *     

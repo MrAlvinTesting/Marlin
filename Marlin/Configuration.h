@@ -9,58 +9,38 @@
  *     - set drivers X, Y, Z, E0 as A4988 
  *     - //commented #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
- *     - set inverting endstops to true 
+ *     - set inverting endstops to true (so NO switches can be used.
  *     - set EEPROM_SETTINGS
  *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using LCD01 3V<->5V bi-directional level converter. LCD works.
- *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER - using hacked direct LCD (aux3+4) adapter. And using hacked LCD controller, to stop beep.
- *       Hacked "no-beep at boot" controller, is using a spare buffer from 4050. 
- *       Remove R1 on adapter. Add 4K7 resistor between  pcb wire (from D37) and GND. Lift pin 3 on 4050 chip. Wire R1 pad to pin 3 on 4050 chip.
- *       Wire pin 2 on 4050 chip to other pad of R1 (the pad closest to Q1) 
- *       4050 buffer output 
+ *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER (a little hacking is needed)
  *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
- *
- * 
- *  Changes to test later:
- *     - 
  *
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests  
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
  *
  *
- *  Hardware details on the RAMPS 1.7 board: 
+ *  Hardware details for these tests - on the RAMPS 1.7 board: 
  *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
  *     - 12V power applied to all three power inputs (equals: Bed-PWR, Stepper-PWR, 12V-PWR)
- *     - no power to Vin => J1 is in Off position. And....
- *     - Arduino is powered from USB  cable - and - USB cable is connected to PC
- *     - Fan1 pin is now added to pins_RAMPS_17.h, and is connected to D8
- *     - on DUE; using 3V<->5V LCD01 adapter, with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard does not work. 
- *     - on DUE; using hacked "direct LCD adapter", with REPRAP_DISCOUNT_SMART_CONTROLLER. LCD works. SDcard works.
- *       Hacked direct LCD adapter, takes power from 5V pin, not Vcc pin. 
- *       On buttom side of pcb: Cut pcb wire from Aux-3 pin Vcc, cut before pcb via point. 
- *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS-1.7_Aux-3 5V pin. 
- *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
- *     - on Mega; REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4, everything works.
- *     - testing sd-card: REPRAP_DISCOUNT_SMART_CONTROLLER has built in SD-card slot (it works).
+ *     - switching between Vin power and USB power for the Arduino. 
+ *     - Fan1 pin works onpin D8
+ *     - REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4 is used for testing LCD and D-card.
  *
  *
  *  Status: 
  *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
  *     - Bed, Hot-end and T3 pins reports temperatures.
- *     - One needs to use NC (normal close) endstops, or 
- *       set endstops to true, like: X_MIN_ENDSTOP_INVERTING true, when using NO (normal open) endstops
- *     - LCD universal bi-directional 3V<->5V adapter for aux-3 and aux-4 is working, with the test program, is working
+ *     - For endstops: X_MIN_ENDSTOP_INVERTING false works for NC (normal close) endstops,  
+ *       and X_MIN_ENDSTOP_INVERTING true works for NO (normal open) endstops
+ *     - LCD universal bi-directional 3V<->5V adapter for aux3+4 is working, but still beeps during boot and programming. Fix it! 
  *     - M106 P1 and M107 P1, now works
- *     - EEPROM settings and commands are working, but must save to eeprom, before it will contain useful data,
+ *     - EEPROM settings and commands are working, but one must save to eeprom, before it will contain useful data,
  *       like, do: M503 to see defaults, then M500 to store in eeprom for the first time 
- *     - on both Mega and DUE, using LCD01 adapter, the LCD, buttons etc. on the REPRAP_DISCOUNT_SMART_CONTROLLER works, 
- *       but the beeper sounds during boot (and programming). 
- *       Must scope it some day, to see if a (large value) pull-down resistor can be placed somewhere (tested and not effective)
- *     - SD-support does not seem to function properly (This issue has been partially resolved, see below).
- *     - All endstops report correctly on M119
+ *     - SD-support now works, after changes to HAL_DUE/spi-pins.h
+ *     - All endstops now report correctly on M119
  *     - To get Z-probe to be included in M119 (or to function at all), 
  *       you need to define a probe type, like: FIX_MOUNTED_PROBE. 
  *       With a probe type defined, Z_MIN_PROBE_ENDSTOP set, and Z_MIN_PROBE_PIN defined in pins_RAMPS_17.h 
@@ -69,37 +49,37 @@
  *       stuff from even being compiled into the firmware. 
  *       Also note; that the S pin on the Z-probe socket needs a positive signal, as this is what usually 
  *       is the sognal from non-touch (magnitic) probes. 
- *     - When compiling using Arduino 1.8.6 and 1.9-beta then a line like this: 
- *       ;    #define Z_ENABLE_PIN       67  //14:62
- *       ;                                   ^
- *       gives a compile error. This error does not happen in Arduino 1.8.5
- *       Either way, I have removed all comments from lines in pins_RAMPS_17.h file, that produced this kind of error
- *
+ *     - When compiling for DUE, using Arduino 1.8.6 and 1.9-beta, then some lines can not have comments at the end of the line,
+ *       it gives a compile error. This error does not happen in Arduino 1.8.5. Fixed by removing the offending comments in pins_RAMPS_17.h
  *     - A SD test sketch has been made. See https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20ports-3-4-LCD/SD_listfiles
  *       This test sketch works for both Mega and Due. 
  *       *** MAKE SURE that the SD-card is placed just right in the card reader slot ***
- 
+ *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
+ *     - SD-card is working 
+ *       
+ * 
+ *  ToDo:
+ *     - remove beep problem (during boot and programming) in combination with Bi-directional 3V<->5V level converter adapter.
+ *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+ *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
+ *     - update sanity check, to ensure that pin D52 will not be used.
+ *     
+ *  Hacks used: 
+ *     - Making the stadard LCD adapter connected to AUX3+4 work with both DUE and Mega:
+ *       Hacked the direct LCD adapter, so it takes power from 5V pin in 17-aux-3, and not Vcc pin. 
+ *       On buttom side of pcb: Cut pcb wire from Aux-3 pin Vcc, cut before pcb via point. 
+ *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS17-Aux3 5V pin. 
+ *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
+ *       Added a "strong" pull-down resistor for pin 37 (beep pin). 
+ *
+ *  Hacks tested: 
  *     - by shorting out the 5V->3V linear regulator on the REPRAP_DISCOUNT_SMART_CONTROLLER, 
  *       the LCD board works on Due, when connecting via standard direct LCD adapter board for Aux3+4
  *       That is the LCD becomes somewhat readable once the contrast potentiometer is turned all the way up. 
  *       At 3.3V supply to this LCD, the text is however only barely readable. So 
  *       the backlight resistor might need replacing with a lower ohm value. Or the contrast potentiometer needs changing. 
- *     - by hacking the LCD controller, the beep during boot and programming goes away.
- *     - by hacking the power pin on the direct LCD adapter it is possible to have full contrast LCD, 
- *       and still have only 3V signals going back into Due pins. 
- *       In this configuration it is important to NOT short the 5V->3V liniar regulator on the LCD controller board. 
- *     - SD-card is working 
- *       
- * 
- *  ToDo:
- *     - get Marlin 2.0 to read the SD-card (Done on Mega and DUE :-) 
- *     - re-test Due with LCD01 level converter (Done, it works now for SD-card, but the beeper issue is there, despite the LCD controller board hack)
- *     - find a way to avoid the pin 37 (beep pin) being activated while booting 
- *       and programming the Due, so the Beeper does not keep making that loud sound. (Done, by hacking the LCD controller board, works with the standard LCD aux3+4 adapter) 
- *       It must be possible to also design a new aux3+4 LCD adapter board, in a way, so this hack is not needed. 
- *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
- *     
+ *
+ *
  */
 
 

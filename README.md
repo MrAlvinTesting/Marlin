@@ -2,7 +2,7 @@
 <img align="right" src="../../raw/1.1.x/buildroot/share/pixmaps/logo/marlin-250.png" />
 
 ********** Preliminary Testing for RAMPS 1.7 **********<br>
-* Main testing is however done on Marlin 2.0, here: https://github.com/MrAlvin/Marlin/tree/bgfx-20x-R17-dev *<br>
+** Main testing is however done on Marlin 2.0, here: https://github.com/MrAlvin/Marlin/tree/bgfx-20x-R17-dev *<br>
 **********<br>
 
 ## Marlin 1.1

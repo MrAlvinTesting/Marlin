@@ -15,11 +15,20 @@
  *   - set REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *   - set SDSUPPORT
  *
+ * Files changed: 
+ *   - pins_RAMPS.h  - has (for now) been changed so it only work with RAMPS 1.7 shield. 
+ *
+ * Files known to be in need of changing, in order to properly implement the RAMPS 1.7 shield:
+ *   - boards.h
+ *   - pins.h
+ *   - new file: pins_RAMPS_17.h
+ *   - pins_RAMPS.h, needs to be reverted to its previous content
+ *
  * Status: 
  *   - 1.8.5, REPRAP_DISCOUNT_SMART_CONTROLLER - OK
  *   - 1.8.5, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - OK
  *   - platform.io, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - OK
- *   - 1.8.6 and 1.9-beta, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - comments // on some lines causes compile error, in the macro processing
+ *   - 1.8.6 and 1.9-beta, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - comments at the end of some lines causes compile error, in the macro processing
  */ 
 
 /**

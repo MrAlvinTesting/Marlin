@@ -16,6 +16,7 @@
  *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
+ *     - testing on Mega: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests  
@@ -56,7 +57,11 @@
  *       *** MAKE SURE that the SD-card is placed just right in the card reader slot ***
  *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
  *     - SD-card is working 
- *       
+ *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
+ *     - 1.8.6, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
+ *     - 1.9.0, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
+ *     - platform.io, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
+ *        
  * 
  *  ToDo:
  *     - remove beep problem (during boot and programming) in combination with Bi-directional 3V<->5V level converter adapter.
@@ -218,8 +223,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
-  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  #define MOTHERBOARD BOARD_RAMPS_17_EFB
+  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -1633,7 +1638,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-#define REPRAP_DISCOUNT_SMART_CONTROLLER
+//#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader
@@ -1766,7 +1771,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // ReprapWorld Graphical LCD

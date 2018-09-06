@@ -12,9 +12,14 @@
  *   - set Z_MIN_PROBE_ENDSTOP
  *   - FIX_MOUNTED_PROBE
  *   - set EEPROM_SETTINGS
- *   - set REPRAP_DISCOUNT_SMART_CONTROLLER
+ *   - set REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *   - set SDSUPPORT
  *
+ * Status: 
+ *   - 1.8.5, REPRAP_DISCOUNT_SMART_CONTROLLER - OK
+ *   - 1.8.5, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - OK
+ *   - platform.io, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - OK
+ *   - 1.8.6 and 1.9-beta, REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER - comments // on some lines causes compile error, in the macro processing
  */ 
 
 /**
@@ -1542,7 +1547,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-#define REPRAP_DISCOUNT_SMART_CONTROLLER
+//#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // ULTIMAKER Controller.
@@ -1669,7 +1674,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // ReprapWorld Graphical LCD

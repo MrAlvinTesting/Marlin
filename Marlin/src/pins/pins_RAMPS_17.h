@@ -457,7 +457,7 @@
         #define BTN_EN2         23
       #else
         #define BTN_EN1         31
-        #define BTN_EN2         37
+        #define BTN_EN2         33
       #endif
 
       #define BTN_ENC           35

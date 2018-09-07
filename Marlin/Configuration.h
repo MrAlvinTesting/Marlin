@@ -17,6 +17,7 @@
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
  *     - testing on Mega: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+ *     - set PINS_DEBUGGING
  *
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
  *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests  
@@ -58,9 +59,9 @@
  *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
  *     - SD-card is working 
  *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
- *     - 1.8.6, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
- *     - 1.9.0, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
- *     - platform.io, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, compiles okay, but beeps all the time, no menu encoder-movement
+ *     - 1.8.6, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, OK
+ *     - 1.9.0, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, OK
+ *     - platform.io, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, ?
  *        
  * 
  *  ToDo:

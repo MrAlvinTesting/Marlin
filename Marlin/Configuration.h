@@ -59,9 +59,8 @@
  *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
  *     - SD-card is working 
  *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
- *     - 1.8.6, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, OK
- *     - 1.9.0, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, OK
- *     - platform.io, for Mega, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, ?
+ *     - 1.8.6, 1.9.0, platform.io, for Mega and Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 
+ *       with LCD01 level converter or hacked LCD adapter: OK
  *        
  * 
  *  ToDo:
@@ -224,8 +223,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_17_EFB
-  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine

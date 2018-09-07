@@ -11,26 +11,33 @@
  *     - set Temp sensor BED 
  *     - set inverting endstops to true (so NO switches can be used.
  *     - set EEPROM_SETTINGS
- *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - tested on DUE: REPRAP_DISCOUNT_SMART_CONTROLLER (a little hacking is needed)
+ *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+ *     - tested on DUE: (a little hacking is needed on LCD adapter, see below): REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER 
  *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
  *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
- *     - testing on Mega: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *     - set PINS_DEBUGGING
- *
- *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
- *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests  
- *  Pleas note: for compilation of firmware,  Arduino IDE 1.8.5 is being used to do these tests 
+ *     Testing TMC2130 driver, using Mega and DUE, with REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     changes in config_adv.h:
+ *     - set Y-stepper is TMC2130
+ *     - set MONITOR_DRIVER_STATUS
+ *     - set TMC_DEBUG
+ *     Other software and hardware details needed to get TMC2130 drivers to work:
+ *     - to install TMC2130 drivers, see: http://marlinfw.org/docs/hardware/tmc_drivers.html
+ *     - to prepare china TMC2130 stepsticks, see: https://github.com/MarlinFirmware/Marlin/issues/8480#issuecomment-357537289 
+ *     - first, test that solder jumpers on hardware TMC2130 is correct, using stepper-test-sketch: https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20steppers/TMC2130
+ *     - then use Marlin to test to see if firmware settings are working
  *
  *
  *  Hardware details for these tests - on the RAMPS 1.7 board: 
  *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
  *     - 12V power applied to all three power inputs (equals: Bed-PWR, Stepper-PWR, 12V-PWR)
  *     - switching between Vin power and USB power for the Arduino. 
- *     - Fan1 pin works onpin D8
+ *     - Fan1 pin works on pin D8
  *     - REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4 is used for testing LCD and D-card.
- *
+ *     - REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER needs a hack to the standard LCD adapter, in order to work. See "Hacks used:" below.
+ *     - on TMC2130, solder jumpers needs to be correct, for the TMC2130 stepper driver to work with SPI. 
+ *     - on Due, use on-board 5V dc-dc converter. Using LCD gets you too close to the 130mA limit for the Due. 
  *
  *  Status: 
  *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
@@ -61,13 +68,17 @@
  *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
  *     - 1.8.6, 1.9.0, platform.io, for Mega and Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 
  *       with LCD01 level converter or hacked LCD adapter: OK
+ *     - For LCD01 and beep problem: Replacing the 10K resistor with a 100K resistor, at the 3V side of the level shifting mosfet,
+ *       and adding a 4K7 pull-down resistor to pin D37 (beep pin), does limit the audiable sounds sufficiently, during boot and programming. 
+ *     - added solder jumper for D52 (for 1.7B4 pcb), rather than making a sanity check addition, 
+ *       to ensure that pin D52 will not be used for anything other than SDSS. As it is det in HAL_DUE/spi-pins.h 
+ *       to ensure that Hardware SPI works!     
+ *     - running TMC2130 stepper driver over SPI works.
  *        
  * 
  *  ToDo:
- *     - remove beep problem (during boot and programming) in combination with Bi-directional 3V<->5V level converter adapter.
- *     - test LCD: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     - do settings in Marlin, so a TMC2130 stepper driver is running, using SPI control. 
- *     - update sanity check, to ensure that pin D52 will not be used.
+ *     - test Max6675 temp sensor 
+
  *     
  *  Hacks used: 
  *     - Making the stadard LCD adapter connected to AUX3+4 work with both DUE and Mega:
@@ -659,7 +670,7 @@
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE']
  */
 #define X_DRIVER_TYPE  A4988
-#define Y_DRIVER_TYPE  A4988
+#define Y_DRIVER_TYPE  TMC2130
 #define Z_DRIVER_TYPE  A4988
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
@@ -684,7 +695,8 @@
  * For mechanical switches, the better approach to reduce noise is to install
  * a 100 nanofarads ceramic capacitor in parallel with the switch, making it
  * essentially noise-proof without sacrificing accuracy.
- * This option also increases MCU load when endstops or the probe are enabled.
+ *** The method (described above), is already in place on the RAMPS 1.7 shield ***
+ * The ENDSTOP_NOISE_FILTER option also increases MCU load when endstops or the probe are enabled.
  * So this is not recommended. USE AT YOUR OWN RISK.
  * (This feature is not required for common micro-switches mounted on PCBs
  * based on the Makerbot design, since they already include the 100nF capacitor.)
@@ -1638,7 +1650,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader
@@ -1771,7 +1783,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // ReprapWorld Graphical LCD

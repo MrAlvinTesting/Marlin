@@ -406,6 +406,9 @@
       #define LCD_PINS_D6       43 //aux-6
       #define LCD_PINS_D7       33 //aux-6
 
+	#elif ENABLED(RDSC_BUTTONS)
+	  //using I2C, so no LCD Display output pins here
+
     #else
 
       #if ENABLED(MKS_12864OLED) || ENABLED(MKS_12864OLED_SSD1306)
@@ -578,6 +581,15 @@
     #elif ENABLED(AZSMZ_12864)
 
       // Pins only defined for RAMPS_SMART currently
+
+    #elif ENABLED(RDSC_BUTTONS)
+
+      #define BEEPER_PIN        37
+      #define BTN_EN1           31
+      #define BTN_EN2           33
+      #define BTN_ENC           35
+      #define KILL_PIN          41
+      #define SD_DETECT_PIN     49
 
     #else
 

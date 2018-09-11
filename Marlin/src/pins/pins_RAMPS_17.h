@@ -613,7 +613,7 @@
   
   
 /*
-So, a REPRAP_DISCOUNT_SMART_CONTROLLER
+So, a REPRAP_DISCOUNT_SMART_CONTROLLER, and a REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 uses the following pins
 
   #define LCD_PINS_RS       16
@@ -634,5 +634,5 @@ uses the following pins
 
 
 And these pins, on aux-4, are probably available for other use: pins 39, 43, 45, 47, 32  
-with a REPRAP_DISCOUNT_SMART_CONTROLLER
+with a REPRAP_DISCOUNT_SMART_CONTROLLER or a REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 */

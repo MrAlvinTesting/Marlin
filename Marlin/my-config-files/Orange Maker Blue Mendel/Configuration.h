@@ -1,34 +1,25 @@
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
+/* For Orange Maker - Blue printer */
+/* For Orange Maker - Blue printer */
+/* For Orange Maker - Blue printer */
+
 
 /*  Changes from default (neutral) settings/define in configuration.h file: 
  *     - set BAUDRATE 115200
  *     - set POWER_SUPPLY 1
  *     - set drivers X, Y, Z, E0 as A4988 
- *     - //commented #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ *     - un-commented #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
  *     - set Temp sensor BED 
+ *     - set PIDTEMP
  *     - set inverting endstops to true (so NO switches can be used.
  *     - set EEPROM_SETTINGS
- *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     - tested on DUE: (a little hacking is needed on LCD adapter, see below): REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER 
+ *     - set REPRAP_DISCOUNT_SMART_CONTROLLER
  *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
- *     - set FIX_MOUNTED_PROBE
  *     - set Z_MIN_PROBE_ENDSTOP
  *     - set PINS_DEBUGGING
- *     Testing TMC2130 driver, using Mega and DUE, with REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - set Y_DRIVER_TYPE to TMC2130
- *     changes in config_adv.h:
- *     - set MONITOR_DRIVER_STATUS
- *     - set TMC_DEBUG
- *     Other software and hardware details needed to get TMC2130 drivers to work:
- *     - to install TMC2130 drivers, see: http://marlinfw.org/docs/hardware/tmc_drivers.html
- *     - to prepare china TMC2130 stepsticks, see: https://github.com/MarlinFirmware/Marlin/issues/8480#issuecomment-357537289 
- *     - first, test that solder jumpers on hardware TMC2130 is correct, using stepper-test-sketch: https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20steppers/TMC2130
- *     - then use Marlin to test to see if firmware settings are working
- *     Testing I2C drivers for LCD, on Mega 
- *     - set LCD_SAINSMART_I2C_2004
+ *     - set Mega 
+ *     - adjusted settings from M503 print (ver. 16) to fit "Orange Maker" "Blue Mendel". 
  *
  *
  *  Hardware details for these tests - on the RAMPS 1.7 board: 
@@ -36,62 +27,26 @@
  *     - 12V power applied to all three power inputs (equals: Bed-PWR, Stepper-PWR, 12V-PWR)
  *     - switching between Vin power and USB power for the Arduino. 
  *     - Fan1 pin works on pin D8
- *     - REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4 is used for testing LCD and D-card.
- *     - REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER needs a hack to the standard LCD adapter, in order to work. See "Hacks used:" below.
+ *     - REPRAP_DISCOUNT_SMART_CONTROLLER with standard (nut hacked) LCD adpter for aux-3+4 is used for LCD and SD-card.
  *     - on TMC2130, solder jumpers needs to be correct, for the TMC2130 stepper driver to work with SPI. 
- *     - power limits for Mega. Vin 7,5-12V, but keep it close to 7,5V, because the 5V regulator is basically a dynamic resistor, which burns off 
- *       the energy difference between Vin volt and 5V. 
- *       Example: Arduino and LCD uses 130mA, Vin is 8.5V => the reglator burns off (8.5-5) x 0.130 = 0.46W
- *       If Vin is 12V then the 5V regulator burns off (12-5) x 0.130 = 0.92W. So more than twice as much heat needs 
- *       to be dissipated via the PCB and into the surrounding air. 
- *       The 5V regulator typically reaches temperatures of: air-temperature + (75 to 92)*C per Watt it needs to burn off. 
- *       Each pin: max 20mA. Each port max 100mA. Entire chip: read data sheet, but rule of thumb: <250mA. 
- *     - power limits for the Due. Vin 6-20V. Output:3V pin max 800mA. 5V pin max 800mA. 5V is switch-mode DC-DC converter. 3V pin is linear regulator (dynamic resistor).
- *       Each pin: pin dependent, with a max of 2,3,4,6,9,15mA - so know you pins, or use buffers or mosfets to drive LEDs, and more. 
+ *
  *
  *  Status: 
- *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
- *     - Bed, Hot-end and T3 pins reports temperatures.
- *     - For endstops: X_MIN_ENDSTOP_INVERTING false works for NC (normal close) endstops,  
- *       and X_MIN_ENDSTOP_INVERTING true works for NO (normal open) endstops
- *     - LCD universal bi-directional 3V<->5V adapter for aux3+4 is working, but still beeps during boot and programming. Fix it! 
+ *     - Steppers ? 
+ *     - Temperatures? select thermostor table 
+ *     - For endstops? : X_MIN_ENDSTOP_INVERTING true? 
  *     - M106 P1 and M107 P1, now works
- *     - EEPROM settings and commands are working, but one must save to eeprom, before it will contain useful data,
- *       like, do: M503 to see defaults, then M500 to store in eeprom for the first time 
- *     - SD-support now works, after changes to HAL_DUE/spi-pins.h
- *     - All endstops now report correctly on M119
- *     - To get Z-probe to be included in M119 (or to function at all), 
- *       you need to define a probe type, like: FIX_MOUNTED_PROBE. 
- *       With a probe type defined, Z_MIN_PROBE_ENDSTOP set, and Z_MIN_PROBE_PIN defined in pins_RAMPS_17.h 
- *       the Z-probe socket is ready for use. 
- *       Please note that setting PROBE_MANUALLY type (or not defining a probe type), will remove any Z-probe 
- *       stuff from even being compiled into the firmware. 
- *       Also note; that the S pin on the Z-probe socket needs a positive signal, as this is what usually 
- *       is the sognal from non-touch (magnitic) probes. 
- *     - When compiling for DUE, using Arduino 1.8.6 and 1.9-beta, then some lines can not have comments at the end of the line,
- *       it gives a compile error. This error does not happen in Arduino 1.8.5. Fixed by removing the offending comments in pins_RAMPS_17.h
- *     - A SD test sketch has been made. See https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20ports-3-4-LCD/SD_listfiles
- *       This test sketch works for both Mega and Due. 
- *       *** MAKE SURE that the SD-card is placed just right in the card reader slot ***
- *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
- *     - SD-card is working 
- *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
- *     - 1.8.6, 1.9.0, platform.io, for Mega and Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 
- *       with LCD01 level converter or hacked LCD adapter: OK
- *     - For LCD01 and beep problem: Replacing the 10K resistor with a 100K resistor, at the 3V side of the level shifting mosfet,
- *       and adding a 4K7 pull-down resistor to pin D37 (beep pin), does limit the audiable sounds sufficiently, during boot and programming. 
- *     - added solder jumper for D52 (for 1.7B4 pcb), rather than making a sanity check addition, 
- *       to ensure that pin D52 will not be used for anything other than SDSS. As it is det in HAL_DUE/spi-pins.h 
- *       to ensure that Hardware SPI works!     
- *     - running TMC2130 stepper driver over SPI works.
- *     Testing I2C drivers for LCD, on Mega. 
- *     - Downloaded ver 1.3.5 of I2C library https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home,
- *       unpack zip file, and make sure that Arduino\Libraries\Newliquidcrystal_135 is the path to the lirary. 1.8.5 compiles for mega
+ *     - EEPROM settings ? 
+ *     - SD-support?
+ *     - All endstops report correctly on M119 ? 
+ *     - To activate Z-probe: set FIX_MOUNTED_PROBE. 
+ *     - use platform.io to compiling for DUE?
+ *     - SD-card working? 
+ *     - ATX power supply ON/Off control? 
  *        
  * 
  *  ToDo:
- *     - test Max6675 temp sensor 
-
+ *     - BABYSTEPPING (set in conf_adv)
  *     
  *  Hacks used: 
  *     - Making the stadard LCD adapter connected to AUX3+4 work with both DUE and Mega:
@@ -100,13 +55,6 @@
  *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS17-Aux3 5V pin. 
  *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
  *       Added a "strong" pull-down resistor for pin 37 (beep pin). 
- *
- *  Hacks tested: 
- *     - by shorting out the 5V->3V linear regulator on the REPRAP_DISCOUNT_SMART_CONTROLLER, 
- *       the LCD board works on Due, when connecting via standard direct LCD adapter board for Aux3+4
- *       That is the LCD becomes somewhat readable once the contrast potentiometer is turned all the way up. 
- *       At 3.3V supply to this LCD, the text is however only barely readable. So 
- *       the backlight resistor might need replacing with a lower ohm value. Or the contrast potentiometer needs changing. 
  *
  *
  */
@@ -482,7 +430,7 @@
 // PID Tuning Guide here: http://reprap.org/wiki/PID_Tuning
 
 // Comment the following line to disable PID and enable bang-bang.
-//#define PIDTEMP
+#define PIDTEMP
 #define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // Limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1 0.95      // Smoothing factor within any PID loop
@@ -683,7 +631,7 @@
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE']
  */
 #define X_DRIVER_TYPE  A4988
-#define Y_DRIVER_TYPE  TMC2130
+#define Y_DRIVER_TYPE  A4988
 #define Z_DRIVER_TYPE  A4988
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
@@ -741,14 +689,14 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 2600, 600}
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 300, 300, 2, 25 }
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -756,7 +704,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 50, 10000 }
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -850,7 +798,7 @@
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
  *   (e.g., an inductive probe or a nozzle-based probe-switch.)
  */
-#define FIX_MOUNTED_PROBE
+//#define FIX_MOUNTED_PROBE
 
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
@@ -1663,7 +1611,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader
@@ -1745,7 +1693,7 @@
 // https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home
 //
 //#define LCD_SAINSMART_I2C_1602
-#define LCD_SAINSMART_I2C_2004
+// #define LCD_SAINSMART_I2C_2004
 
 //
 // Generic LCM1602 LCD adapter

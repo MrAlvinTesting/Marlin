@@ -3,6 +3,18 @@
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
 /********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
 
+/** Compiling Marlin 2.0 firmware, is best done using Platform.IO 
+ *     - See this for official instructions of how to install platform.io: http://marlinfw.org/docs/basics/install_platformio.html
+ *     - also see this video: https://www.youtube.com/watch?v=bPdZvv8jJJ0 - though I am not a fan of the intro music, the technical info is top notch. 
+ *     - VSCode editor web site https://code.visualstudio.com/ - downloads for Mac, Windows, Linux: https://code.visualstudio.com/Download
+ *     - Atom editor https://atom.io/ - is also the download page
+ *     - Marlin 2.0 may also compile from Arduino IDE, but it might be a good idea to rename all "Libraries" folders to for instance "Libraries-backup",
+ *       as this will prevent the Arduino compilation process from possibly using the wrong versions of the libraries for Marlin. 
+ *       LCD or I2C (or others) are areas where conflict or mis-compilation might occur. With empty "Libraries" folder, then only 
+ *       fill up with those libraries that a compile error shows a need for. It will say that an "#include <.....this....h> file is missing.
+ */
+ 
+
 /*  Changes from default (neutral) settings/define in configuration.h file: 
  *     - set BAUDRATE 115200
  *     - set POWER_SUPPLY 1
@@ -28,7 +40,7 @@
  *     - first, test that solder jumpers on hardware TMC2130 is correct, using stepper-test-sketch: https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20steppers/TMC2130
  *     - then use Marlin to test to see if firmware settings are working
  *     Testing I2C drivers for LCD, on Mega 
- *     - set LCD_SAINSMART_I2C_2004
+ *     - right now LCD is however set to be standard REPRAP_DISCOUNT_SMART_CONTROLLER
  *
  *
  *  Hardware details for these tests - on the RAMPS 1.7 board: 
@@ -87,6 +99,12 @@
  *     Testing I2C drivers for LCD, on Mega. 
  *     - Downloaded ver 1.3.5 of I2C library https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home,
  *       unpack zip file, and make sure that Arduino\Libraries\Newliquidcrystal_135 is the path to the lirary. 1.8.5 compiles for mega
+ *     - Did find one way to do I2C PCF8575 IO-expander adapter in combination with REPRAP_DISCOUNT_SMART_CONTROLLER
+ *       I am looking for ways to limit the number of pins needed to control the LCD, so more Arduino pins can be used/dedicated to control stepper drivers.
+ *       For this option to work: 
+ *               - set LCD_SAINSMART_I2C_2004
+ *               - set RDSC_BUTTONS  
+ 
  *        
  * 
  *  ToDo:
@@ -1663,7 +1681,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader
@@ -1745,8 +1763,8 @@
 // https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home
 //
 //#define LCD_SAINSMART_I2C_1602
-#define LCD_SAINSMART_I2C_2004
-#define RDSC_BUTTONS
+//#define LCD_SAINSMART_I2C_2004
+//#define RDSC_BUTTONS
 
 //
 // Generic LCM1602 LCD adapter

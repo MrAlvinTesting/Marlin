@@ -39,8 +39,10 @@
  *     - to prepare china TMC2130 stepsticks, see: https://github.com/MarlinFirmware/Marlin/issues/8480#issuecomment-357537289 
  *     - first, test that solder jumpers on hardware TMC2130 is correct, using stepper-test-sketch: https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20steppers/TMC2130
  *     - then use Marlin to test to see if firmware settings are working
+ *     Other changes / updates to files
+ *     - added TEMP_CHAMBER_PIN option in pins_RAMPS_17.h
  *     Testing I2C drivers for LCD, on Mega 
- *     - right now LCD is however set to be standard REPRAP_DISCOUNT_SMART_CONTROLLER
+ *     - right now LCD is however set to be standard: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
  *
  *
  *  Hardware details for these tests - on the RAMPS 1.7 board: 
@@ -265,8 +267,8 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_17_EFB
-  //#define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -1681,7 +1683,7 @@
 //
 // Note: Usually sold with a white PCB.
 //
-#define REPRAP_DISCOUNT_SMART_CONTROLLER
+//#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 //
 // Original RADDS LCD Display+Encoder+SDCardReader
@@ -1815,7 +1817,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // ReprapWorld Graphical LCD

@@ -203,8 +203,10 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN          6  // Analog Input
-#define TEMP_1_PIN          7  // Analog Input
+#define TEMP_1_PIN          7  // Analog Input, could be 7 (marked T3 on PCB)
 #define TEMP_BED_PIN        5  // Analog Input
+#define TEMP_CHAMBER_PIN   -1  // Analog Input (marked T3 on PCB)
+
 
 // SPI for Max6675 or Max31855 Thermocouple
 #if DISABLED(SDSUPPORT)

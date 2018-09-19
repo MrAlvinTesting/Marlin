@@ -14,6 +14,14 @@
  *       fill up with those libraries that a compile error shows a need for. It will say that an "#include <.....this....h> file is missing.
  */
  
+ /* I change these settings all the time for testing, so now I keep the settings up here */
+   //#define MOTHERBOARD BOARD_RAMPS_17_EFB
+   #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+   
+   #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+   //#define REPRAP_DISCOUNT_SMART_CONTROLLER
+   
+   
 
 /*  Changes from default (neutral) settings/define in configuration.h file: 
  *     - set BAUDRATE 115200
@@ -1817,7 +1825,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // ReprapWorld Graphical LCD

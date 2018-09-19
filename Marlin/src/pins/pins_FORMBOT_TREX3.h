@@ -28,8 +28,8 @@
   #error "Oops!  Make sure you have 'Arduino Mega' selected from the 'Tools -> Boards' menu."
 #endif
 
-#if E_STEPPERS > 3 || HOTENDS > 3
-  #error "Formbot supports up to 3 hotends / E-steppers. Comment this line to keep going."
+#if E_STEPPERS > 2 || HOTENDS > 2
+  #error "Formbot supports up to 2 hotends / E-steppers. Comment this line to keep going."
 #endif
 
 #define DEFAULT_MACHINE_NAME "Formbot"
@@ -39,8 +39,8 @@
 // Servos
 //
 #define SERVO0_PIN         11
-#define SERVO1_PIN          6
-#define SERVO2_PIN          5
+#define SERVO1_PIN         -1    // was 6
+#define SERVO2_PIN         -1
 #define SERVO3_PIN         -1
 
 //
@@ -140,19 +140,18 @@
 //
 #define HEATER_0_PIN       10
 #define HEATER_1_PIN        7
-#define HEATER_BED_PIN     58
-
-#define LED4_PIN            8
+#define HEATER_BED_PIN      8
 
 #define FAN_PIN             9
+//#define FAN1_PIN          4
 
-#if DISABLED(FILAMENT_RUNOUT_SENSOR)
-  #define FAN1_PIN          4
-#endif
+#define FIL_RUNOUT_PIN     23
+#define FIL_RUNOUT2_PIN    21
 
 //
 // Misc. Functions
 //
+#define CASE_LIGHT_PIN      5
 #define SDSS               53
 #ifndef ROXYs_TRex
   #define LED_PIN          13

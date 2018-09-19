@@ -242,6 +242,7 @@
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
 #define E4_AUTO_FAN_PIN -1
+#define E5_AUTO_FAN_PIN -1
 #define CHAMBER_AUTO_FAN_PIN -1
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
 #define EXTRUDER_AUTO_FAN_SPEED   255  // == full speed
@@ -287,6 +288,13 @@
 
 //#define Z_LATE_ENABLE // Enable Z the last moment. Needed if your Z driver overheats.
 
+// Employ an external closed loop controller. Override pins here if needed.
+//#define EXTERNAL_CLOSED_LOOP_CONTROLLER
+#if ENABLED(EXTERNAL_CLOSED_LOOP_CONTROLLER)
+  //#define CLOSED_LOOP_ENABLE_PIN        -1
+  //#define CLOSED_LOOP_MOVE_COMPLETE_PIN -1
+#endif
+
 /**
  * Dual Steppers / Dual Endstops
  *
@@ -328,6 +336,17 @@
   #if ENABLED(Z_DUAL_ENDSTOPS)
     #define Z2_USE_ENDSTOP _XMAX_
     #define Z_DUAL_ENDSTOPS_ADJUSTMENT  0
+  #endif
+#endif
+
+//#define Z_TRIPLE_STEPPER_DRIVERS
+#if ENABLED(Z_TRIPLE_STEPPER_DRIVERS)
+  //#define Z_TRIPLE_ENDSTOPS
+  #if ENABLED(Z_TRIPLE_ENDSTOPS)
+    #define Z2_USE_ENDSTOP _XMAX_
+    #define Z3_USE_ENDSTOP _YMAX_
+    #define Z_TRIPLE2_ENDSTOPS_ADJUSTMENT  0
+    #define Z_TRIPLE3_ENDSTOPS_ADJUSTMENT  0
   #endif
 #endif
 
@@ -425,6 +444,7 @@
 
 #if ENABLED(ULTIPANEL)
   #define MANUAL_FEEDRATE {50*60, 50*60, 4*60, 60} // Feedrates for manual moves along X, Y, Z, E from panel
+  #define MANUAL_E_MOVES_RELATIVE // Show LCD extruder moves as relative rather than absolute positions
   #define ULTIPANEL_FEEDMULTIPLY  // Comment to disable setting feedrate multiplier via encoder
 #endif
 
@@ -463,7 +483,7 @@
 //#define ADAPTIVE_STEP_SMOOTHING
 
 // Microstep setting (Only functional when stepper driver microstep pins are connected to MCU.
-#define MICROSTEP_MODES { 16, 16, 16, 16, 16 } // [1,2,4,8,16]
+#define MICROSTEP_MODES { 16, 16, 16, 16, 16, 16 } // [1,2,4,8,16]
 
 /**
  *  @section  stepper motor current
@@ -595,6 +615,10 @@
    * point in the file.
    */
   //#define POWER_LOSS_RECOVERY
+  #if ENABLED(POWER_LOSS_RECOVERY)
+    //#define POWER_LOSS_PIN   44     // Pin to detect power loss
+    //#define POWER_LOSS_STATE HIGH   // State of pin indicating power loss
+  #endif
 
   /**
    * Sort SD file listings in alphabetical order.
@@ -839,13 +863,16 @@
 
 /**
  * Minimum delay after setting the stepper DIR (in ns)
- *    0 : No delay (Expect at least 10µS since one Stepper ISR must transpire)
- *   20 : Minimum for TMC2xxx drivers
- *  200 : Minimum for A4988 drivers
- *  500 : Minimum for LV8729 drivers (guess, no info in datasheet)
- *  650 : Minimum for DRV8825 drivers
- * 1500 : Minimum for TB6600 drivers (guess, no info in datasheet)
- *15000 : Minimum for TB6560 drivers (guess, no info in datasheet)
+ *     0 : No delay (Expect at least 10µS since one Stepper ISR must transpire)
+ *    20 : Minimum for TMC2xxx drivers
+ *   200 : Minimum for A4988 drivers
+ *   400 : Minimum for A5984 drivers
+ *   500 : Minimum for LV8729 drivers (guess, no info in datasheet)
+ *   650 : Minimum for DRV8825 drivers
+ *  1500 : Minimum for TB6600 drivers (guess, no info in datasheet)
+ * 15000 : Minimum for TB6560 drivers (guess, no info in datasheet)
+ *
+ * Override the default value based on the driver type set in Configuration.h.
  */
 #define MINIMUM_STEPPER_DIR_DELAY 0
 
@@ -856,6 +883,8 @@
  *   2 : Minimum for DRV8825 stepper drivers
  *   3 : Minimum for TB6600 stepper drivers
  *  30 : Minimum for TB6560 stepper drivers
+ *
+ * Override the default value based on the driver type set in Configuration.h.
  */
 #define MINIMUM_STEPPER_PULSE 2
 
@@ -868,6 +897,8 @@
  *  150000 : Maximum for TB6600 stepper driver
  *  130000 : Maximum for LV8729 stepper driver
  *   15000 : Maximum for TB6560 stepper driver
+ *
+ * Override the default value based on the driver type set in Configuration.h.
  */
 #define MAXIMUM_STEPPER_RATE 250000
 
@@ -1037,23 +1068,12 @@
 // @section tmc
 
 /**
- * Enable this section if you have TMC26X motor drivers.
- * You will need to import the TMC26XStepper library into the Arduino IDE for this
- * (https://github.com/trinamic/TMC26XStepper.git)
+ * TMC26X Stepper Driver options
+ *
+ * The TMC26XStepper library is required for this stepper driver.
+ * https://github.com/trinamic/TMC26XStepper
  */
-//#define HAVE_TMC26X
-#if ENABLED(HAVE_TMC26X)  // Choose your axes here. This is mandatory!
-  //#define X_IS_TMC26X
-  //#define X2_IS_TMC26X
-  //#define Y_IS_TMC26X
-  //#define Y2_IS_TMC26X
-  //#define Z_IS_TMC26X
-  //#define Z2_IS_TMC26X
-  //#define E0_IS_TMC26X
-  //#define E1_IS_TMC26X
-  //#define E2_IS_TMC26X
-  //#define E3_IS_TMC26X
-  //#define E4_IS_TMC26X
+#if HAS_DRIVER(TMC26X)
 
   #define X_MAX_CURRENT     1000 // in mA
   #define X_SENSE_RESISTOR    91 // in mOhms
@@ -1079,6 +1099,10 @@
   #define Z2_SENSE_RESISTOR   91
   #define Z2_MICROSTEPS       16
 
+  #define Z3_MAX_CURRENT    1000
+  #define Z3_SENSE_RESISTOR   91
+  #define Z3_MICROSTEPS       16
+
   #define E0_MAX_CURRENT    1000
   #define E0_SENSE_RESISTOR   91
   #define E0_MICROSTEPS       16
@@ -1099,62 +1123,33 @@
   #define E4_SENSE_RESISTOR   91
   #define E4_MICROSTEPS       16
 
-#endif
+  #define E5_MAX_CURRENT    1000
+  #define E5_SENSE_RESISTOR   91
+  #define E5_MICROSTEPS       16
+
+#endif // TMC26X
 
 // @section tmc_smart
 
 /**
- * Enable this for SilentStepStick Trinamic TMC2130 SPI-configurable stepper drivers.
- *
- * You'll also need the TMC2130Stepper Arduino library
- * (https://github.com/teemuatlut/TMC2130Stepper).
- *
  * To use TMC2130 stepper drivers in SPI mode connect your SPI pins to
  * the hardware SPI interface on your board and define the required CS pins
  * in your `pins_MYBOARD.h` file. (e.g., RAMPS 1.4 uses AUX3 pins `X_CS_PIN 53`, `Y_CS_PIN 49`, etc.).
  * You may also use software SPI if you wish to use general purpose IO pins.
- */
-//#define HAVE_TMC2130
-#if ENABLED(HAVE_TMC2130)  // Choose your axes here. This is mandatory!
-  //#define X_IS_TMC2130
-  //#define X2_IS_TMC2130
-  //#define Y_IS_TMC2130
-  //#define Y2_IS_TMC2130
-  //#define Z_IS_TMC2130
-  //#define Z2_IS_TMC2130
-  //#define E0_IS_TMC2130
-  //#define E1_IS_TMC2130
-  //#define E2_IS_TMC2130
-  //#define E3_IS_TMC2130
-  //#define E4_IS_TMC2130
-#endif
-
-/**
- * Enable this for SilentStepStick Trinamic TMC2208 UART-configurable stepper drivers.
- * Connect #_SERIAL_TX_PIN to the driver side PDN_UART pin with a 1K resistor.
+ *
+ * The TMC2130Stepper library is required for this stepper driver.
+ * https://github.com/teemuatlut/TMC2130Stepper
+ *
+ * To use TMC2208 stepper UART-configurable stepper drivers
+ * connect #_SERIAL_TX_PIN to the driver side PDN_UART pin with a 1K resistor.
  * To use the reading capabilities, also connect #_SERIAL_RX_PIN
  * to PDN_UART without a resistor.
  * The drivers can also be used with hardware serial.
  *
- * You'll also need the TMC2208Stepper Arduino library
- * (https://github.com/teemuatlut/TMC2208Stepper).
+ * The TMC2208Stepper library is required for this stepper driver.
+ * https://github.com/teemuatlut/TMC2208Stepper
  */
-//#define HAVE_TMC2208
-#if ENABLED(HAVE_TMC2208)  // Choose your axes here. This is mandatory!
-  //#define X_IS_TMC2208
-  //#define X2_IS_TMC2208
-  //#define Y_IS_TMC2208
-  //#define Y2_IS_TMC2208
-  //#define Z_IS_TMC2208
-  //#define Z2_IS_TMC2208
-  //#define E0_IS_TMC2208
-  //#define E1_IS_TMC2208
-  //#define E2_IS_TMC2208
-  //#define E3_IS_TMC2208
-  //#define E4_IS_TMC2208
-#endif
-
-#if ENABLED(HAVE_TMC2130) || ENABLED(HAVE_TMC2208)
+#if HAS_TRINAMIC
 
   #define R_SENSE           0.11  // R_sense resistor for SilentStepStick2130
   #define HOLD_MULTIPLIER    0.5  // Scales down the holding current from run current
@@ -1178,6 +1173,9 @@
   #define Z2_CURRENT         800
   #define Z2_MICROSTEPS       16
 
+  #define Z3_CURRENT         800
+  #define Z3_MICROSTEPS       16
+
   #define E0_CURRENT         800
   #define E0_MICROSTEPS       16
 
@@ -1192,6 +1190,9 @@
 
   #define E4_CURRENT         800
   #define E4_MICROSTEPS       16
+
+  #define E5_CURRENT         800
+  #define E5_MICROSTEPS       16
 
   /**
    * Use software SPI for TMC2130.
@@ -1242,11 +1243,13 @@
   #define Y2_HYBRID_THRESHOLD    100
   #define Z_HYBRID_THRESHOLD       3
   #define Z2_HYBRID_THRESHOLD      3
+  #define Z3_HYBRID_THRESHOLD      3
   #define E0_HYBRID_THRESHOLD     30
   #define E1_HYBRID_THRESHOLD     30
   #define E2_HYBRID_THRESHOLD     30
   #define E3_HYBRID_THRESHOLD     30
   #define E4_HYBRID_THRESHOLD     30
+  #define E5_HYBRID_THRESHOLD     30
 
   /**
    * Use stallGuard2 to sense an obstacle and trigger an endstop.
@@ -1309,71 +1312,66 @@
 // @section L6470
 
 /**
- * Enable this section if you have L6470 motor drivers.
- * You need to import the L6470 library into the Arduino IDE for this.
- * (https://github.com/ameyer/Arduino-L6470)
+ * L6470 Stepper Driver options
+ *
+ * The Arduino-L6470 library is required for this stepper driver.
+ * https://github.com/ameyer/Arduino-L6470
  */
+#if HAS_DRIVER(L6470)
 
-//#define HAVE_L6470DRIVER
-#if ENABLED(HAVE_L6470DRIVER)
+  #define X_MICROSTEPS        16 // number of microsteps
+  #define X_OVERCURRENT     2000 // maxc current in mA. If the current goes over this value, the driver will switch off
+  #define X_STALLCURRENT    1500 // current in mA where the driver will detect a stall
 
-  //#define X_IS_L6470
-  //#define X2_IS_L6470
-  //#define Y_IS_L6470
-  //#define Y2_IS_L6470
-  //#define Z_IS_L6470
-  //#define Z2_IS_L6470
-  //#define E0_IS_L6470
-  //#define E1_IS_L6470
-  //#define E2_IS_L6470
-  //#define E3_IS_L6470
-  //#define E4_IS_L6470
+  #define X2_MICROSTEPS       16
+  #define X2_OVERCURRENT    2000
+  #define X2_STALLCURRENT   1500
 
-  #define X_MICROSTEPS      16 // number of microsteps
-  #define X_OVERCURRENT   2000 // maxc current in mA. If the current goes over this value, the driver will switch off
-  #define X_STALLCURRENT  1500 // current in mA where the driver will detect a stall
+  #define Y_MICROSTEPS        16
+  #define Y_OVERCURRENT     2000
+  #define Y_STALLCURRENT    1500
 
-  #define X2_MICROSTEPS     16
-  #define X2_OVERCURRENT  2000
-  #define X2_STALLCURRENT 1500
+  #define Y2_MICROSTEPS       16
+  #define Y2_OVERCURRENT    2000
+  #define Y2_STALLCURRENT   1500
 
-  #define Y_MICROSTEPS      16
-  #define Y_OVERCURRENT   2000
-  #define Y_STALLCURRENT  1500
+  #define Z_MICROSTEPS        16
+  #define Z_OVERCURRENT     2000
+  #define Z_STALLCURRENT    1500
 
-  #define Y2_MICROSTEPS     16
-  #define Y2_OVERCURRENT  2000
-  #define Y2_STALLCURRENT 1500
+  #define Z2_MICROSTEPS       16
+  #define Z2_OVERCURRENT    2000
+  #define Z2_STALLCURRENT   1500
 
-  #define Z_MICROSTEPS      16
-  #define Z_OVERCURRENT   2000
-  #define Z_STALLCURRENT  1500
+  #define Z3_MICROSTEPS       16
+  #define Z3_OVERCURRENT    2000
+  #define Z3_STALLCURRENT   1500
 
-  #define Z2_MICROSTEPS     16
-  #define Z2_OVERCURRENT  2000
-  #define Z2_STALLCURRENT 1500
+  #define E0_MICROSTEPS       16
+  #define E0_OVERCURRENT    2000
+  #define E0_STALLCURRENT   1500
 
-  #define E0_MICROSTEPS     16
-  #define E0_OVERCURRENT  2000
-  #define E0_STALLCURRENT 1500
+  #define E1_MICROSTEPS       16
+  #define E1_OVERCURRENT    2000
+  #define E1_STALLCURRENT   1500
 
-  #define E1_MICROSTEPS     16
-  #define E1_OVERCURRENT  2000
-  #define E1_STALLCURRENT 1500
+  #define E2_MICROSTEPS       16
+  #define E2_OVERCURRENT    2000
+  #define E2_STALLCURRENT   1500
 
-  #define E2_MICROSTEPS     16
-  #define E2_OVERCURRENT  2000
-  #define E2_STALLCURRENT 1500
+  #define E3_MICROSTEPS       16
+  #define E3_OVERCURRENT    2000
+  #define E3_STALLCURRENT   1500
 
-  #define E3_MICROSTEPS     16
-  #define E3_OVERCURRENT  2000
-  #define E3_STALLCURRENT 1500
+  #define E4_MICROSTEPS       16
+  #define E4_OVERCURRENT    2000
+  #define E4_STALLCURRENT   1500
 
-  #define E4_MICROSTEPS     16
-  #define E4_OVERCURRENT  2000
-  #define E4_STALLCURRENT 1500
+  #define E5_MICROSTEPS       16
+  #define E5_OVERCURRENT    2000
+  #define E5_STALLCURRENT   1500
 
-#endif
+#endif // L6470
 
 /**
  * TWI/I2C BUS

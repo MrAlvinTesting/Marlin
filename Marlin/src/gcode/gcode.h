@@ -76,6 +76,7 @@
  * M3   - Turn laser/spindle on, set spindle/laser speed/power, set rotation to clockwise
  * M4   - Turn laser/spindle on, set spindle/laser speed/power, set rotation to counter-clockwise
  * M5   - Turn laser/spindle off
+ * M12  - Set up closed loop control system. More features coming soon. (Requires EXTERNAL_CLOSED_LOOP_CONTROLLER)
  * M17  - Enable/Power all stepper motors
  * M18  - Disable all stepper motors; same as M84
  * M20  - List SD card. (Requires SDSUPPORT)
@@ -144,8 +145,8 @@
  * M150 - Set Status LED Color as R<red> U<green> B<blue> P<bright>. Values 0-255. (Requires BLINKM, RGB_LED, RGBW_LED, NEOPIXEL_LED, or PCA9632).
  * M155 - Auto-report temperatures with interval of S<seconds>. (Requires AUTO_REPORT_TEMPERATURES)
  * M163 - Set a single proportion for a mixing extruder. (Requires MIXING_EXTRUDER)
- * M164 - Save the mix as a virtual extruder. (Requires MIXING_EXTRUDER and MIXING_VIRTUAL_TOOLS)
- * M165 - Set the proportions for a mixing extruder. Use parameters ABCDHI to set the mixing factors. (Requires MIXING_EXTRUDER)
+ * M164 - Commit the mix (Req. MIXING_EXTRUDER) and optionally save as a virtual tool (Req. MIXING_VIRTUAL_TOOLS > 1)
+ * M165 - Set the mix for a mixing extruder wuth parameters ABCDHI. (Requires MIXING_EXTRUDER and DIRECT_MIXING_IN_G1)
  * M190 - Sxxx Wait for bed current temp to reach target temp. ** Waits only when heating! **
  *        Rxxx Wait for bed current temp to reach target temp. ** Waits for heating or cooling. **
  * M200 - Set filament diameter, D<diameter>, setting E axis units to cubic. (Use S0 to revert to linear units.)
@@ -436,6 +437,10 @@ private:
   #if ENABLED(SPINDLE_LASER_ENABLE)
     static void M3_M4(bool is_M3);
     static void M5();
+  #endif
+
+  #if ENABLED(EXTERNAL_CLOSED_LOOP_CONTROLLER)
+    static void M12();
   #endif
 
   static void M17();

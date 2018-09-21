@@ -590,7 +590,7 @@ void Temperature::_temp_error(const int8_t e, const char * const serial_msg, con
     if (!killed) {
       Running = false;
       killed = true;
-      kill(lcd_msg);
+      kill(lcd_msg,15);
     }
     else
       disable_all_heaters(); // paranoia
@@ -772,7 +772,7 @@ void Temperature::manage_heater() {
   #endif
 
   #if ENABLED(EMERGENCY_PARSER)
-    if (emergency_parser.killed_by_M112) kill(PSTR(MSG_KILLED));
+    if (emergency_parser.killed_by_M112) kill(PSTR(MSG_KILLED),23);
   #endif
 
   if (!temp_meas_ready) return;
@@ -942,7 +942,7 @@ float Temperature::analog2temp(const int raw, const uint8_t e) {
       SERIAL_ERROR_START();
       SERIAL_ERROR((int)e);
       SERIAL_ERRORLNPGM(MSG_INVALID_EXTRUDER_NUM);
-      kill(PSTR(MSG_KILLED));
+      kill(PSTR(MSG_KILLED),1);
       return 0.0;
     }
 

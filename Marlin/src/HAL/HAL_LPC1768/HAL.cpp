@@ -74,7 +74,7 @@ void HAL_adc_init(void) {
 // externals need to make the call to KILL compile
 #include "../../core/language.h"
 
-extern void kill(const char*);
+extern void kill(const char*, int kill_id);
 extern const char errormagic[];
 
 void HAL_adc_enable_channel(int ch) {
@@ -82,7 +82,7 @@ void HAL_adc_enable_channel(int ch) {
 
   if (pin == -1) {
     SERIAL_PRINTF("%sINVALID ANALOG PORT:%d\n", errormagic, ch);
-    kill(MSG_KILLED);
+    kill(MSG_KILLED,50);
   }
 
   int8_t pin_port = LPC1768_PIN_PORT(pin),

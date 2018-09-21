@@ -180,7 +180,7 @@ void disable_e_stepper(const uint8_t e);
 void disable_e_steppers();
 void disable_all_steppers();
 
-void kill(const char*);
+void kill(const char*, int kill_id);
 
 void quickstop_stepper();
 

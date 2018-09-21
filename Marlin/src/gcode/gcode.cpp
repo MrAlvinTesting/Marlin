@@ -154,7 +154,7 @@ void GcodeSuite::dwell(millis_t time) {
           SERIAL_ECHOLNPGM("//action:" G29_ACTION_ON_FAILURE);
         #endif
         #if ENABLED(G29_HALT_ON_FAILURE)
-          kill(PSTR(MSG_ERR_PROBING_FAILED));
+          kill(PSTR(MSG_ERR_PROBING_FAILED),8);
         #endif
         return;
       }

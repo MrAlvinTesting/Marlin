@@ -789,7 +789,7 @@ void lcd_reset_status() {
  * draw the kill screen
  *
  */
-void kill_screen(const char* lcd_msg) {
+void kill_screen(const char* lcd_msg, int kill_id) {
   lcd_init();
   lcd_setalertstatusPGM(lcd_msg);
   lcd_kill_screen();

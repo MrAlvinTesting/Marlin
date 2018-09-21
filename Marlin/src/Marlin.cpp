@@ -345,7 +345,7 @@ void manage_inactivity(const bool ignore_stepper_queue/*=false*/) {
   if (max_inactive_time && ELAPSED(ms, gcode.previous_move_ms + max_inactive_time)) {
     SERIAL_ERROR_START();
     SERIAL_ECHOLNPAIR(MSG_KILL_INACTIVE_TIME, parser.command_ptr);
-    kill(PSTR(MSG_KILLED));
+    kill(PSTR(MSG_KILLED),5);
   }
 
   // Prevent steppers timing-out in the middle of M600
@@ -402,7 +402,7 @@ void manage_inactivity(const bool ignore_stepper_queue/*=false*/) {
     if (killCount >= KILL_DELAY) {
       SERIAL_ERROR_START();
       SERIAL_ERRORLNPGM(MSG_KILL_BUTTON);
-      kill(PSTR(MSG_KILLED));
+      kill(PSTR(MSG_KILLED),6);
     }
   #endif
 
@@ -599,15 +599,18 @@ void idle(
  * Kill all activity and lock the machine.
  * After this the machine will need to be reset.
  */
-void kill(const char* lcd_msg) {
+void kill(const char* lcd_msg, int kill_id) {
   SERIAL_ERROR_START();
-  SERIAL_ERRORLNPGM(MSG_ERR_KILLED);
+  // SERIAL_ERRORLNPGM(MSG_ERR_KILLED);
+  SERIAL_ERRORPGM(MSG_ERR_KILLED_1);
+  SERIAL_ERROR(kill_id);
+  SERIAL_ERRORLNPGM(MSG_ERR_KILLED_2);
 
   thermalManager.disable_all_heaters();
   disable_all_steppers();
 
   #if ENABLED(ULTRA_LCD)
-    kill_screen(lcd_msg);
+    kill_screen(lcd_msg, kill_id);
   #else
     UNUSED(lcd_msg);
   #endif

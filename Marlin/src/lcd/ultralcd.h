@@ -54,7 +54,7 @@
   void lcd_reset_status();
   void lcd_status_printf_P(const uint8_t level, const char * const fmt, ...);
   void lcd_kill_screen();
-  void kill_screen(const char* lcd_msg);
+  void kill_screen(const char* lcd_msg, int kill_id);
 
   extern uint8_t lcdDrawUpdate;
   inline void lcd_refresh() { lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; }

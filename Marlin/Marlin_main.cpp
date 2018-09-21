@@ -14960,7 +14960,10 @@ void idle(
  */
 void kill(const char* lcd_msg, int kill_id) {
   SERIAL_ERROR_START();
-  SERIAL_ERRORLNPGM(MSG_ERR_KILLED);
+  //SERIAL_ERRORLNPGM(MSG_ERR_KILLED);
+  SERIAL_ERRORPGM(MSG_ERR_KILLED_1);
+  SERIAL_ERROR(kill_id);
+  SERIAL_ERRORLNPGM(MSG_ERR_KILLED_2);
 
   thermalManager.disable_all_heaters();
   disable_all_steppers();

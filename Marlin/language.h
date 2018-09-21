@@ -141,6 +141,8 @@
 #define MSG_COUNT_X                         " Count X:"
 #define MSG_COUNT_A                         " Count A:"
 #define MSG_ERR_KILLED                      "Printer halted. kill() called!"
+#define MSG_ERR_KILLED_1                    "Printer halted. kill("
+#define MSG_ERR_KILLED_2                    ") called!"
 #define MSG_ERR_STOPPED                     "Printer stopped due to errors. Fix the error and use M999 to restart. (Temperature is reset. Set it after restarting)"
 #define MSG_BUSY_PROCESSING                 "busy: processing"
 #define MSG_BUSY_PAUSED_FOR_USER            "busy: paused for user"

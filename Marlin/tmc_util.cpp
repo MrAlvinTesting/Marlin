@@ -107,7 +107,7 @@ bool report_tmc_status = false;
         #if ENABLED(TMC_DEBUG)
           tmc_report_all();
         #endif
-        kill(PSTR("Driver error"));
+        kill(PSTR("Driver error"),12);
       }
     #endif
 

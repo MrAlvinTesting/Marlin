@@ -2531,8 +2531,8 @@ void Planner::_set_position_mm(const float &a, const float &b, const float &c, c
     #if !IS_KINEMATIC && ENABLED(AUTO_BED_LEVELING_UBL)
       leveling_active ? ubl.get_z_correction(a, b) :
     #endif
-    0)
-  ));
+    0
+  )));
   position[E_AXIS] = LROUND(e * axis_steps_per_mm[_EINDEX]);
   #if HAS_POSITION_FLOAT
     position_float[A_AXIS] = a;
@@ -2574,11 +2574,11 @@ void Planner::set_position_mm(const AxisEnum axis, const float &v) {
   #else
     const uint8_t axis_index = axis;
   #endif
-  position[axis] = LROUND(axis_steps_per_mm[axis_index] * (v +
+  position[axis] = LROUND(axis_steps_per_mm[axis_index] * (v + (
     #if ENABLED(AUTO_BED_LEVELING_UBL)
       axis == Z_AXIS && leveling_active ? ubl.get_z_correction(current_position[X_AXIS], current_position[Y_AXIS]) :
     #endif
-    0
+    0)
   ));
   #if HAS_POSITION_FLOAT
     position_float[axis] = v;

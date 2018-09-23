@@ -49,6 +49,12 @@
 #define BOARD_RAMPS_PLUS_EEF   146    // RAMPS Plus 3DYMY (Power outputs: Hotend0, Hotend1, Fan)
 #define BOARD_RAMPS_PLUS_SF    148    // RAMPS Plus 3DYMY (Power outputs: Spindle, Controller Fan)
 
+#define BOARD_RAMPS_17_EFB     153    // RAMPS 1.7 (Power outputs: Hotend, Fan, Bed)
+#define BOARD_RAMPS_17_EEB     154    // RAMPS 1.7 (Power outputs: Hotend0, Hotend1, Bed)
+#define BOARD_RAMPS_17_EFF     155    // RAMPS 1.7 (Power outputs: Hotend, Fan0, Fan1)
+#define BOARD_RAMPS_17_EEF     156    // RAMPS 1.7 (Power outputs: Hotend0, Hotend1, Fan)
+#define BOARD_RAMPS_17_SF      158    // RAMPS 1.7 (Power outputs: Spindle, Controller Fan)
+
 //
 // RAMPS Derivatives - ATmega1280, ATmega2560
 //
@@ -208,6 +214,11 @@
 #define BOARD_ULTRATRONICS_PRO 1560   // ReprapWorld Ultratronics Pro V1.0
 #define BOARD_ARCHIM2          1590   // UltiMachine Archim2 (with TMC2130 drivers)
 #define BOARD_ALLIGATOR        1602   // Alligator Board R2
+#define BOARD_RAMPS17_DUE_EFB  1613   // RAMPS17 (Power outputs: Hotend, Fan, Bed)
+#define BOARD_RAMPS17_DUE_EEB  1614   // RAMPS17 (Power outputs: Hotend0, Hotend1, Bed)
+#define BOARD_RAMPS17_DUE_EFF  1615   // RAMPS17 (Power outputs: Hotend, Fan0, Fan1)
+#define BOARD_RAMPS17_DUE_EEF  1616   // RAMPS17 (Power outputs: Hotend0, Hotend1, Fan)
+#define BOARD_RAMPS17_DUE_SF   1618   // RAMPS17 (Power outputs: Spindle, Controller Fan)
 
 //
 // STM32 ARM Cortex-M3

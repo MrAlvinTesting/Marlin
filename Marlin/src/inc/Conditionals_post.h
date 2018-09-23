@@ -284,13 +284,25 @@
 #ifndef POWER_SUPPLY
   #define POWER_SUPPLY 1
 #endif
-#if (POWER_SUPPLY == 1)     // 1 = ATX
-  #define PS_ON_AWAKE  LOW
-  #define PS_ON_ASLEEP HIGH
-#elif (POWER_SUPPLY == 2)   // 2 = X-Box 360 203W
-  #define PS_ON_AWAKE  HIGH
-  #define PS_ON_ASLEEP LOW
-#endif
+  #if ENABLED(IS_RAMPS_17)
+	// RAMPS_17 uses a mosfet to pull the PS_ON low, this adds protection to the Arduino pin
+	// but it reverses the HIGH/LOW logic
+	#if (POWER_SUPPLY == 1)     // 1 = ATX
+	  #define PS_ON_AWAKE  HIGH
+	  #define PS_ON_ASLEEP LOW
+	#elif (POWER_SUPPLY == 2)   // 2 = X-Box 360 203W
+	  #define PS_ON_AWAKE  HIGH
+	  #define PS_ON_ASLEEP LOW
+	#endif
+  #else // default
+	#if (POWER_SUPPLY == 1)     // 1 = ATX
+	  #define PS_ON_AWAKE  LOW
+	  #define PS_ON_ASLEEP HIGH
+	#elif (POWER_SUPPLY == 2)   // 2 = X-Box 360 203W
+	  #define PS_ON_AWAKE  HIGH
+	  #define PS_ON_ASLEEP LOW
+	#endif
+  #endif
 #define HAS_POWER_SWITCH (POWER_SUPPLY > 0 && PIN_EXISTS(PS_ON))
 
 /**

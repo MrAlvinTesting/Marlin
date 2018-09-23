@@ -1,148 +1,3 @@
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-/********* Preliminary Configuration example for testing RAMPS 1.7B    ***************/
-
-/** Compiling Marlin 2.0 firmware, is best done using Platform.IO
- *     - See this for official instructions of how to install platform.io: http://marlinfw.org/docs/basics/install_platformio.html
- *     - also see this video: https://www.youtube.com/watch?v=bPdZvv8jJJ0 - though I am not a fan of the intro music, the technical info is top notch.
- *     - VSCode editor web site https://code.visualstudio.com/ - downloads for Mac, Windows, Linux: https://code.visualstudio.com/Download
- *     - Atom editor https://atom.io/ - is also the download page
- *     - Marlin 2.0 may also compile from Arduino IDE, but it might be a good idea to rename all "Libraries" folders to for instance "Libraries-backup",
- *       as this will prevent the Arduino compilation process from possibly using the wrong versions of the libraries for Marlin.
- *       LCD or I2C (or others) are areas where conflict or mis-compilation might occur. With empty "Libraries" folder, then only
- *       fill up with those libraries that a compile error shows a need for. It will say that an "#include <.....this....h> file is missing.
- */
-
- /* I change these settings all the time for testing, so now I keep the settings up here */
-   //#define MOTHERBOARD BOARD_RAMPS_17_EFB
-   #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
-
-   //#define REPRAP_DISCOUNT_SMART_CONTROLLER
-   #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
-
-
-
-
-/*  Changes from default (neutral) settings/define in configuration.h file:
- *     - set BAUDRATE 115200
- *     - set POWER_SUPPLY 1
- *     - set drivers X, Y, Z, E0 as A4988
- *     - //commented #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
- *     - set Temp sensor BED
- *     - set inverting endstops to true (so NO switches can be used.
- *     - set EEPROM_SETTINGS
- *     - tested on Mega: REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     - tested on DUE: (a little hacking is needed on LCD adapter, see below): REPRAP_DISCOUNT_SMART_CONTROLLER and REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     - set SDSUPPORT (both Software and Hardware SPI options are (now) working)
- *     - set FIX_MOUNTED_PROBE
- *     - set Z_MIN_PROBE_ENDSTOP
- *     - set PINS_DEBUGGING
- *     Testing TMC2130 driver, using Mega and DUE, with REPRAP_DISCOUNT_SMART_CONTROLLER
- *     - set Y_DRIVER_TYPE to TMC2130
- *     changes in config_adv.h:
- *     - set MONITOR_DRIVER_STATUS
- *     - set TMC_DEBUG
- *     Other software and hardware details needed to get TMC2130 drivers to work:
- *     - to install TMC2130 drivers, see: http://marlinfw.org/docs/hardware/tmc_drivers.html
- *     - to prepare china TMC2130 stepsticks, see: https://github.com/MarlinFirmware/Marlin/issues/8480#issuecomment-357537289
- *     - first, test that solder jumpers on hardware TMC2130 is correct, using stepper-test-sketch: https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20steppers/TMC2130
- *     - then use Marlin to test to see if firmware settings are working
- *     Other changes / updates to files
- *     - added TEMP_CHAMBER_PIN option in pins_RAMPS_17.h
- *     Testing I2C drivers for LCD, on Mega
- *     - right now LCD is however set to be standard: REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
- *     Testing ID on HALT error messages
- *     - modified kill() function
- *
- *
- *  Hardware details for these tests - on the RAMPS 1.7 board:
- *     - Jumpers for MS1, MS2, MS3 installed, so stepper driver does 1/16th microstepping
- *     - 12V power applied to all three power inputs (equals: Bed-PWR, Stepper-PWR, 12V-PWR)
- *     - switching between Vin power and USB power for the Arduino.
- *     - Fan1 pin works on pin D8
- *     - REPRAP_DISCOUNT_SMART_CONTROLLER with standard LCD adpter for aux-3+4 is used for testing LCD and D-card.
- *     - REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER needs a hack to the standard LCD adapter, in order to work. See "Hacks used:" below.
- *     - on TMC2130, solder jumpers needs to be correct, for the TMC2130 stepper driver to work with SPI.
- *     - power limits for Mega. Vin 7,5-12V, but keep it close to 7,5V, because the 5V regulator is basically a dynamic resistor, which burns off
- *       the energy difference between Vin volt and 5V.
- *       Example: Arduino and LCD uses 130mA, Vin is 8.5V => the reglator burns off (8.5-5) x 0.130 = 0.46W
- *       If Vin is 12V then the 5V regulator burns off (12-5) x 0.130 = 0.92W. So more than twice as much heat needs
- *       to be dissipated via the PCB and into the surrounding air.
- *       The 5V regulator typically reaches temperatures of: air-temperature + (75 to 92)*C per Watt it needs to burn off.
- *       Each pin: max 20mA. Each port max 100mA. Entire chip: read data sheet, but rule of thumb: <250mA.
- *     - power limits for the Due. Vin 6-20V. Output:3V pin max 800mA. 5V pin max 800mA. 5V is switch-mode DC-DC converter. 3V pin is linear regulator (dynamic resistor).
- *       Each pin: pin dependent, with a max of 2,3,4,6,9,15mA - so know you pins, or use buffers or mosfets to drive LEDs, and more.
- *
- *  Status:
- *     - Steppers X, Y, Z, E0 can be (manually) moved, using manual controls in Repetier PC Host (v. 2.0.5)
- *     - Bed, Hot-end and T3 pins reports temperatures.
- *     - For endstops: X_MIN_ENDSTOP_INVERTING false works for NC (normal close) endstops,
- *       and X_MIN_ENDSTOP_INVERTING true works for NO (normal open) endstops
- *     - LCD universal bi-directional 3V<->5V adapter for aux3+4 is working, but still beeps during boot and programming. Fix it!
- *     - M106 P1 and M107 P1, now works
- *     - EEPROM settings and commands are working, but one must save to eeprom, before it will contain useful data,
- *       like, do: M503 to see defaults, then M500 to store in eeprom for the first time
- *     - SD-support now works, after changes to HAL_DUE/spi-pins.h
- *     - All endstops now report correctly on M119
- *     - To get Z-probe to be included in M119 (or to function at all),
- *       you need to define a probe type, like: FIX_MOUNTED_PROBE.
- *       With a probe type defined, Z_MIN_PROBE_ENDSTOP set, and Z_MIN_PROBE_PIN defined in pins_RAMPS_17.h
- *       the Z-probe socket is ready for use.
- *       Please note that setting PROBE_MANUALLY type (or not defining a probe type), will remove any Z-probe
- *       stuff from even being compiled into the firmware.
- *       Also note; that the S pin on the Z-probe socket needs a positive signal, as this is what usually
- *       is the sognal from non-touch (magnitic) probes.
- *     - When compiling for DUE, using Arduino 1.8.6 and 1.9-beta, then some lines can not have comments at the end of the line,
- *       it gives a compile error. This error does not happen in Arduino 1.8.5. Fixed by removing the offending comments in pins_RAMPS_17.h
- *     - A SD test sketch has been made. See https://github.com/MrAlvin/RAMPS_1.7/tree/master/Arduino%20test%20sketches/test%20ports-3-4-LCD/SD_listfiles
- *       This test sketch works for both Mega and Due.
- *       *** MAKE SURE that the SD-card is placed just right in the card reader slot ***
- *     - by hacking the LCD adapter board, the beeping during boot and programming goes away.
- *     - SD-card is working
- *     - 1.8.5, for Mega and  Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled, 1.8.5 will not compile
- *     - 1.8.6, 1.9.0, platform.io, for Mega and Due, with REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER enabled,
- *       with LCD01 level converter or hacked LCD adapter: OK
- *     - For LCD01 and beep problem: Replacing the 10K resistor with a 100K resistor, at the 3V side of the level shifting mosfet,
- *       and adding a 4K7 pull-down resistor to pin D37 (beep pin), does limit the audiable sounds sufficiently, during boot and programming.
- *     - added solder jumper for D52 (for 1.7B4 pcb), rather than making a sanity check addition,
- *       to ensure that pin D52 will not be used for anything other than SDSS. As it is det in HAL_DUE/spi-pins.h
- *       to ensure that Hardware SPI works!
- *     - running TMC2130 stepper driver over SPI works.
- *     Testing I2C drivers for LCD, on Mega.
- *     - Downloaded ver 1.3.5 of I2C library https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home,
- *       unpack zip file, and make sure that Arduino\Libraries\Newliquidcrystal_135 is the path to the lirary. 1.8.5 compiles for mega
- *     - Did find one way to do I2C PCF8575 IO-expander adapter in combination with REPRAP_DISCOUNT_SMART_CONTROLLER
- *       I am looking for ways to limit the number of pins needed to control the LCD, so more Arduino pins can be used/dedicated to control stepper drivers.
- *       For this option to work:
- *               - set LCD_SAINSMART_I2C_2004
- *               - set RDSC_BUTTONS
- *
- *
- *
- *  ToDo:
- *     - test Max6675 temp sensor
- *
- *
- *  Hacks used:
- *     - Making the stadard LCD adapter connected to AUX3+4 work with both DUE and Mega:
- *       Hacked the direct LCD adapter, so it takes power from 5V pin in 17-aux-3, and not Vcc pin.
- *       On buttom side of pcb: Cut pcb wire from Aux-3 pin Vcc, cut before pcb via point.
- *       On top side of pcb: scrape via point, so copper is exposed. Solder wire from via point, to RAMPS17-Aux3 5V pin.
- *       LCD and 3V regulator on LCD pcb, now has 5V, but all data pins (in and out) are only 3V.
- *       Added a "strong" pull-down resistor for pin 37 (beep pin).
- *
- *  Hacks tested:
- *     - by shorting out the 5V->3V linear regulator on the REPRAP_DISCOUNT_SMART_CONTROLLER,
- *       the LCD board works on Due, when connecting via standard direct LCD adapter board for Aux3+4
- *       That is the LCD becomes somewhat readable once the contrast potentiometer is turned all the way up.
- *       At 3.3V supply to this LCD, the text is however only barely readable. So
- *       the backlight resistor might need replacing with a lower ohm value. Or the contrast potentiometer needs changing.
- *
- *
- */
-
-
 /**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
@@ -270,7 +125,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 115200
+#define BAUDRATE 250000
 
 // Enable the Bluetooth serial interface on AT90USB devices
 //#define BLUETOOTH
@@ -278,8 +133,7 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  //#define MOTHERBOARD BOARD_RAMPS_17_EFB
-  #define MOTHERBOARD BOARD_RAMPS17_DUE_EFB
+  #define MOTHERBOARD BOARD_RAMPS_14_EFB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -353,12 +207,29 @@
 #endif
 
 /**
+ * Switching Toolhead
+ *
+ * Support for swappable and dockable toolheads, such as
+ * the E3D Tool Changer. Toolheads are locked with a servo.
+ */
+//#define SWITCHING_TOOLHEAD
+#if ENABLED(SWITCHING_TOOLHEAD)
+  #define SWITCHING_TOOLHEAD_SERVO_NR       2         // Index of the servo connector
+  #define SWITCHING_TOOLHEAD_SERVO_ANGLES { 0, 180 }  // (degrees) Angles for Lock, Unlock
+  #define SWITCHING_TOOLHEAD_Y_POS        235         // (mm) Y position of the toolhead dock
+  #define SWITCHING_TOOLHEAD_Y_SECURITY    10         // (mm) Security distance Y axis
+  #define SWITCHING_TOOLHEAD_Y_CLEAR       60         // (mm) Minimum distance from dock for unobstructed X axis
+  #define SWITCHING_TOOLHEAD_X_POS        { 215, 0 }  // (mm) X positions for parking the extruders
+  #define SWITCHING_TOOLHEAD_SECURITY_RAISE 5         // (mm) Z-raise before parking
+#endif
+
+/**
  * "Mixing Extruder"
- *   - Adds a new code, M165, to set the current mix factors.
+ *   - Adds G-codes M163 and M164 to set and "commit" the current mix factors.
  *   - Extends the stepping routines to move multiple steppers in proportion to the mix.
- *   - Optional support for Repetier Firmware M163, M164, and virtual extruder.
- *   - This implementation supports only a single extruder.
- *   - Enable DIRECT_MIXING_IN_G1 for Pia Taubert's reference implementation
+ *   - Optional support for Repetier Firmware's 'M164 S<index>' supporting virtual tools.
+ *   - This implementation supports up to two mixing extruders.
+ *   - Enable DIRECT_MIXING_IN_G1 for M165 and mixing in G1 (from Pia Taubert's reference implementation).
  */
 //#define MIXING_EXTRUDER
 #if ENABLED(MIXING_EXTRUDER)
@@ -374,7 +245,6 @@
 //#define HOTEND_OFFSET_Y {0.0, 5.00}  // (mm) relative Y-offset for each nozzle
 //#define HOTEND_OFFSET_Z {0.0, 0.00}  // (mm) relative Z-offset for each nozzle
 
-
 // @section machine
 
 /**
@@ -386,7 +256,7 @@
  *
  * :{ 0:'No power switch', 1:'ATX', 2:'X-Box 360' }
  */
-#define POWER_SUPPLY 1
+#define POWER_SUPPLY 0
 
 #if POWER_SUPPLY > 0
   // Enable this option to leave the PSU off at startup.
@@ -423,8 +293,7 @@
  *     2 : 200k thermistor - ATC Semitec 204GT-2 (4.7k pullup)
  *     3 : Mendel-parts thermistor (4.7k pullup)
  *     4 : 10k thermistor !! do not use it for a hotend. It gives bad resolution at high temp. !!
- *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan & J-Head) (4.7k pullup) 
-  *   25 : 100K thermistor - ATC Semitec 104GT-1 (4.7k pullup)  Created using an AD595 and thermocouple at Labitat.dk
+ *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan & J-Head) (4.7k pullup)
  *   501 : 100K Zonestar (Tronxy X3A) Thermistor
  *     6 : 100k EPCOS - Not as accurate as table 1 (created using a fluke thermocouple) (4.7k pullup)
  *     7 : 100k Honeywell thermistor 135-104LAG-J01 (4.7k pullup)
@@ -447,7 +316,6 @@
  *    51 : 100k thermistor - EPCOS (1k pullup)
  *    52 : 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
  *    55 : 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (1k pullup)
-
  *
  *  1047 : Pt1000 with 4k7 pullup
  *  1010 : Pt1000 with 1k pullup (non standard)
@@ -465,7 +333,8 @@
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_4 0
-#define TEMP_SENSOR_BED 25
+#define TEMP_SENSOR_5 0
+#define TEMP_SENSOR_BED 0
 #define TEMP_SENSOR_CHAMBER 0
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
@@ -495,6 +364,7 @@
 #define HEATER_2_MINTEMP 5
 #define HEATER_3_MINTEMP 5
 #define HEATER_4_MINTEMP 5
+#define HEATER_5_MINTEMP 5
 #define BED_MINTEMP 5
 
 // When temperature exceeds max temp, your heater will be switched off.
@@ -505,6 +375,7 @@
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
 #define HEATER_4_MAXTEMP 275
+#define HEATER_5_MAXTEMP 275
 #define BED_MAXTEMP 150
 
 //===========================================================================
@@ -513,7 +384,7 @@
 // PID Tuning Guide here: http://reprap.org/wiki/PID_Tuning
 
 // Comment the following line to disable PID and enable bang-bang.
-//#define PIDTEMP
+#define PIDTEMP
 #define BANG_MAX 255     // Limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // Limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1 0.95      // Smoothing factor within any PID loop
@@ -660,9 +531,9 @@
 #define USE_XMIN_PLUG
 #define USE_YMIN_PLUG
 #define USE_ZMIN_PLUG
-#define USE_XMAX_PLUG
-#define USE_YMAX_PLUG
-#define USE_ZMAX_PLUG
+//#define USE_XMAX_PLUG
+//#define USE_YMAX_PLUG
+//#define USE_ZMAX_PLUG
 
 // Enable pullup for all endstops to prevent a floating state
 #define ENDSTOPPULLUPS
@@ -691,13 +562,13 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
-#define X_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define Y_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define Z_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define X_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define Y_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define Z_MAX_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
-#define Z_MIN_PROBE_ENDSTOP_INVERTING true // set to true to invert the logic of the probe.
+#define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Y_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define X_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Y_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Z_MIN_PROBE_ENDSTOP_INVERTING false // set to true to invert the logic of the probe.
 
 /**
  * Stepper Drivers
@@ -713,17 +584,19 @@
  *          TMC5130, TMC5130_STANDALONE
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE']
  */
-#define X_DRIVER_TYPE  A4988
-#define Y_DRIVER_TYPE  TMC2130
-#define Z_DRIVER_TYPE  A4988
+//#define X_DRIVER_TYPE  A4988
+//#define Y_DRIVER_TYPE  A4988
+//#define Z_DRIVER_TYPE  A4988
 //#define X2_DRIVER_TYPE A4988
 //#define Y2_DRIVER_TYPE A4988
 //#define Z2_DRIVER_TYPE A4988
-#define E0_DRIVER_TYPE A4988
+//#define Z3_DRIVER_TYPE A4988
+//#define E0_DRIVER_TYPE A4988
 //#define E1_DRIVER_TYPE A4988
 //#define E2_DRIVER_TYPE A4988
 //#define E3_DRIVER_TYPE A4988
 //#define E4_DRIVER_TYPE A4988
+//#define E5_DRIVER_TYPE A4988
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
@@ -739,8 +612,7 @@
  * For mechanical switches, the better approach to reduce noise is to install
  * a 100 nanofarads ceramic capacitor in parallel with the switch, making it
  * essentially noise-proof without sacrificing accuracy.
- *** The method (described above), is already in place on the RAMPS 1.7 shield ***
- * The ENDSTOP_NOISE_FILTER option also increases MCU load when endstops or the probe are enabled.
+ * This option also increases MCU load when endstops or the probe are enabled.
  * So this is not recommended. USE AT YOUR OWN RISK.
  * (This feature is not required for common micro-switches mounted on PCBs
  * based on the Makerbot design, since they already include the 100nF capacitor.)
@@ -770,14 +642,14 @@
 /**
  * Default Axis Steps Per Unit (steps/mm)
  * Override with M92
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
 #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
 #define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
 
@@ -785,7 +657,7 @@
  * Default Max Acceleration (change/s) change = mm/s
  * (Maximum start speed for accelerated moves)
  * Override with M201
- *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4]]]]
+ *                                      X, Y, Z, E0 [, E1[, E2[, E3[, E4[, E5]]]]]
  */
 #define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
 
@@ -838,7 +710,7 @@
  *
  * Enable this option for a probe connected to the Z Min endstop pin.
  */
-//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 
 /**
  * Z_MIN_PROBE_ENDSTOP
@@ -859,8 +731,7 @@
  * disastrous consequences. Use with caution and do your homework.
  *
  */
-#define Z_MIN_PROBE_ENDSTOP
-
+//#define Z_MIN_PROBE_ENDSTOP
 
 /**
  * Probe Type
@@ -881,7 +752,10 @@
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
  *   (e.g., an inductive probe or a nozzle-based probe-switch.)
  */
-#define FIX_MOUNTED_PROBE
+//#define FIX_MOUNTED_PROBE
+#if ENABLED(FIX_MOUNTED_PROBE)
+  #define MANUAL_DEPLOY_STOW
+#endif
 
 /**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
@@ -1025,6 +899,7 @@
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
 #define INVERT_E4_DIR false
+#define INVERT_E5_DIR false
 
 // @section homing
 
@@ -1191,9 +1066,9 @@
 
   // Set the boundaries for probing (where the probe can reach).
   //#define LEFT_PROBE_BED_POSITION MIN_PROBE_EDGE
-  //#define RIGHT_PROBE_BED_POSITION (X_BED_SIZE - MIN_PROBE_EDGE)
+  //#define RIGHT_PROBE_BED_POSITION (X_BED_SIZE - (MIN_PROBE_EDGE))
   //#define FRONT_PROBE_BED_POSITION MIN_PROBE_EDGE
-  //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - MIN_PROBE_EDGE)
+  //#define BACK_PROBE_BED_POSITION (Y_BED_SIZE - (MIN_PROBE_EDGE))
 
   // Probe along the Y axis, advancing X after each column
   //#define PROBE_Y_FIRST
@@ -1389,7 +1264,7 @@
 // M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 //
-#define EEPROM_SETTINGS // Enable for M500 and M501 commands
+//#define EEPROM_SETTINGS // Enable for M500 and M501 commands
 //#define DISABLE_M503    // Saves ~2700 bytes of PROGMEM. Disable for release!
 #define EEPROM_CHITCHAT   // Give feedback on EEPROM commands. Disable to save PROGMEM.
 
@@ -1591,7 +1466,7 @@
  * you must uncomment the following option or it won't work.
  *
  */
-#define SDSUPPORT
+//#define SDSUPPORT
 
 /**
  * SD CARD: SPI SPEED
@@ -1777,7 +1652,6 @@
 //
 //#define LCD_SAINSMART_I2C_1602
 //#define LCD_SAINSMART_I2C_2004
-//#define RDSC_BUTTONS
 
 //
 // Generic LCM1602 LCD adapter

@@ -191,7 +191,7 @@
   #define MSG_EDITING_STOPPED                 _UxGT("Mesh Editing Stopped")
 #endif
 #ifndef MSG_USER_MENU
-  #define MSG_USER_MENU                       _UxGT("Custom User Commands")
+  #define MSG_USER_MENU                       _UxGT("Custom Commands")
 #endif
 #ifndef MSG_UBL_DOING_G29
   #define MSG_UBL_DOING_G29                   _UxGT("Doing G29")
@@ -809,6 +809,12 @@
 #endif
 #ifndef MSG_BLTOUCH_STOW
   #define MSG_BLTOUCH_STOW                    _UxGT("Stow BLTouch")
+#endif
+#ifndef MSG_MANUAL_DEPLOY
+  #define MSG_MANUAL_DEPLOY                   _UxGT("Deploy Z-Probe")
+#endif
+#ifndef MSG_MANUAL_STOW
+  #define MSG_MANUAL_STOW                     _UxGT("Stow Z-Probe")
 #endif
 #ifndef MSG_HOME
   #define MSG_HOME                            _UxGT("Home") // Used as MSG_HOME " " MSG_X MSG_Y MSG_Z " " MSG_FIRST

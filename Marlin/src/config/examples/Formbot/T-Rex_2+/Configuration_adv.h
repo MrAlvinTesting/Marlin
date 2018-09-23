@@ -349,8 +349,8 @@
   #if ENABLED(Z_TRIPLE_ENDSTOPS)
     #define Z2_USE_ENDSTOP _XMAX_
     #define Z3_USE_ENDSTOP _YMAX_
-    #define Z_TRIPLE2_ENDSTOPS_ADJUSTMENT  0
-    #define Z_TRIPLE3_ENDSTOPS_ADJUSTMENT  0
+    #define Z_TRIPLE_ENDSTOPS_ADJUSTMENT2  0
+    #define Z_TRIPLE_ENDSTOPS_ADJUSTMENT3  0
   #endif
 #endif
 
@@ -1694,6 +1694,7 @@
   #define MAX7219_NUMBER_UNITS 2   // Number of Max7219 units in chain.
   #define MAX7219_ROTATE       0   // Rotate the display clockwise (in multiples of +/- 90°)
                                    // connector at:  right=0   bottom=-90  top=90  left=180
+  #define MAX7219_REVERSE_ORDER   // The individual LED matrix units may be in reversed order
 
   /**
    * Sample debug features

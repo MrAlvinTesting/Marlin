@@ -50,6 +50,15 @@
  *     That any kind of comments on many of the lines with pin definitions, will produce 
  *     a compile error when compiling for DUE, in Arduino IDE 1.8.6 and 1.9, but not in 1.8.5
  */
+ 
+ /**
+ * There are currently two designs of the prototype of the RAMPS 1.7 shield
+ * - Version 1.7B should only have a very limited distribution, but since it 
+ * exists, it should be supported by this pins file.
+ * - Version 1.7C will hopefully be the version that will be in use in the future
+ */
+//#define IS_RAMPS_17B
+#define IS_RAMPS_17C
 
 #if ENABLED(TARGET_LPC1768)
   #error "Oops!  Set MOTHERBOARD to an LPC1768-based board when building for LPC1768."
@@ -93,51 +102,93 @@
 // Z Probe (when not Z_MIN_PIN)
 //
 #ifndef Z_MIN_PROBE_PIN
-  #define Z_MIN_PROBE_PIN  64
+  #ifdef IS_RAMPS_17B
+     #define Z_MIN_PROBE_PIN  64  //!!
+  #else 
+	 #ifdef IS_RAMPS_17C
+	    #define Z_MIN_PROBE_PIN  48  //!!
+	 #endif
+  #endif
 #endif
 
 //
 // Steppers
 //
+
+// X
 #define X_STEP_PIN         56
 #define X_DIR_PIN          57
 #define X_ENABLE_PIN       55
 #ifndef X_CS_PIN
-  #define X_CS_PIN         46
+  #ifdef IS_RAMPS_17B
+    #define X_CS_PIN       46 // !!
+  #else
+	#define X_CS_PIN       62 // !!
+  #endif
 #endif
 
-#define Y_STEP_PIN         62
-#define Y_DIR_PIN          63
+// Y
+#ifdef IS_RAMPS_17B
+  #define Y_STEP_PIN       62  // 46  !!
+  #define Y_DIR_PIN        63  // 42  !!
+#else
+  #ifdef IS_RAMPS_17C
+    #define Y_STEP_PIN     46  //!!
+    #define Y_DIR_PIN      42  //!!
+  #endif
+#endif
 #define Y_ENABLE_PIN       58
 #ifndef Y_CS_PIN
-  #define Y_CS_PIN         42
+  #ifdef IS_RAMPS_17B
+    #define Y_CS_PIN       42    //63 (A9)  !!
+  #else
+	#define Y_CS_PIN       63    // (A9)  !!
+  #endif
 #endif
 
+// Z
 #define Z_STEP_PIN         68
 #define Z_DIR_PIN          69
 #define Z_ENABLE_PIN       67
 #ifndef Z_CS_PIN
-  #define Z_CS_PIN         48
+  #ifdef IS_RAMPS_17B
+    #define Z_CS_PIN       48   // !!
+  #else
+	#define Z_CS_PIN       66   // !!
+  #endif
+  
 #endif
 
+// E0
 #define E0_STEP_PIN        34
 #define E0_DIR_PIN         36
 #define E0_ENABLE_PIN      30
 #ifndef E0_CS_PIN
-  #define E0_CS_PIN        38
+  #ifdef IS_RAMPS_17B
+    #define E0_CS_PIN      38  // 64 (A10)   !!
+  #else
+	#define E0_CS_PIN      64  // A10)   !!
+  #endif
+  
 #endif
 
+//E1
 #define E1_STEP_PIN        24
 #define E1_DIR_PIN         26
 #define E1_ENABLE_PIN      22
 #ifndef E1_CS_PIN
-  #define E1_CS_PIN         6
+  #ifdef IS_RAMPS_17B
+    #define E1_CS_PIN       6  // !! ??
+  #else
+	#define E1_CS_PIN       6
+  #endif
+  
 #endif
 
 /**
  * Default pins for TMC software SPI
  */
-#if ENABLED(TMC_USE_SW_SPI)    // verify further for 1.7
+#if ENABLED(TMC_USE_SW_SPI)    // verify further for 1.7  !!
   #ifndef TMC_SW_MOSI
     #define TMC_SW_MOSI    75  // 14:51
   #endif
@@ -171,30 +222,54 @@
   /**
    * Software serial
    */
-
+  // X
   #define X_SERIAL_TX_PIN    54
-  #define X_SERIAL_RX_PIN    46
+  #ifdef IS_RAMPS_17B
+    #define X_SERIAL_RX_PIN  46  //62 (A8)   !!
+  #else
+	#define X_SERIAL_RX_PIN  62 // (A8)   !!
+  #endif
   #define X2_SERIAL_TX_PIN   -1
   #define X2_SERIAL_RX_PIN   -1
 
+  // Y
   #define Y_SERIAL_TX_PIN    44
-  #define Y_SERIAL_RX_PIN    42
+  #ifdef IS_RAMPS_17B
+    #define Y_SERIAL_RX_PIN  42  //63 (A9)   !!
+  #else
+	#define Y_SERIAL_RX_PIN  63 // (A9)   !!
+  #endif
+  
   #define Y2_SERIAL_TX_PIN   -1
   #define Y2_SERIAL_RX_PIN   -1
 
+  // Z
   #define Z_SERIAL_TX_PIN    66
-  #define Z_SERIAL_RX_PIN    48
+  #ifdef IS_RAMPS_17B
+    #define Z_SERIAL_RX_PIN  48  // 66 (A12)  !!
+  #else
+    #define Z_SERIAL_RX_PIN  66 // (A12)  !!
+  #endif
   #define Z2_SERIAL_TX_PIN   -1
   #define Z2_SERIAL_RX_PIN   -1
 
+  // E0
   #define E0_SERIAL_TX_PIN   28
-  #define E0_SERIAL_RX_PIN   38
+  #ifdef IS_RAMPS_17B
+    #define E0_SERIAL_RX_PIN 38  // 64 (A10) !!
+  #else
+	#define E0_SERIAL_RX_PIN 64 // (A10) !!
+  #endif
+  // E1
   #define E1_SERIAL_TX_PIN    7
   #define E1_SERIAL_RX_PIN    6
+  // E2
   #define E2_SERIAL_TX_PIN   -1
   #define E2_SERIAL_RX_PIN   -1
+  // E3
   #define E3_SERIAL_TX_PIN   -1
   #define E3_SERIAL_RX_PIN   -1
+  // E4
   #define E4_SERIAL_TX_PIN   -1
   #define E4_SERIAL_RX_PIN   -1
 #endif
@@ -203,9 +278,9 @@
 // Temperature Sensors
 //
 #define TEMP_0_PIN          6  // Analog Input
-#define TEMP_1_PIN          7  // Analog Input, could be 7 (marked T3 on PCB)
+#define TEMP_1_PIN          7  // Analog Input
 #define TEMP_BED_PIN        5  // Analog Input
-#define TEMP_CHAMBER_PIN   -1  // Analog Input (marked T3 on PCB)
+#define TEMP_CHAMBER_PIN   -1  // Analog Input 
 
 
 // SPI for Max6675 or Max31855 Thermocouple
@@ -306,7 +381,7 @@
 #endif
 
 #ifndef PS_ON_PIN
-  #define PS_ON_PIN        12
+  #define PS_ON_PIN        48  //!!
 #endif
 
 // This section may need fixing for 1.7 !!
